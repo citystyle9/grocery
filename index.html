@@ -1,0 +1,4976 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>گروسری بجٹ پلانر — 100% درست اور حتمی ایڈیشن</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --font-ur: 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
+      --font-en: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      --border: #e2e8f0;
+      --border-focus: #0d9488;
+
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #94a3b8;
+
+      --primary: #0f766e;
+      --primary-hover: #115e59;
+      --primary-soft: #ccfbf1;
+      --primary-glow: rgba(15, 118, 110, 0.15);
+
+      --success: #16a34a;
+      --success-soft: #dcfce7;
+      --danger: #dc2626;
+      --danger-soft: #fee2e2;
+      --warning: #d97706;
+      --warning-soft: #fef3c7;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+
+      --table-row-hover: #f1f5f9;
+      --table-row-selected: #f0fdfa;
+      --table-row-selected-hover: #ccfbf1;
+      --table-row-editing: #fefce8;
+      --table-row-drag: #e0f2fe;
+      --table-border-accent: #cbd5e1;
+    }
+
+    [data-theme="dark"] {
+      --bg: #090d16;
+      --surface: #111827;
+      --surface-subtle: #1e293b;
+      --border: #334155;
+      --border-focus: #14b8a6;
+
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --text-subtle: #94a3b8;
+
+      --primary: #14b8a6;
+      --primary-hover: #2dd4bf;
+      --primary-soft: #134e4a;
+      --primary-glow: rgba(20, 184, 166, 0.25);
+
+      --success: #22c55e;
+      --success-soft: #064e3b;
+      --danger: #ef4444;
+      --danger-soft: #7f1d1d;
+      --warning: #f59e0b;
+      --warning-soft: #78350f;
+
+      --table-row-hover: rgba(255, 255, 255, 0.06);
+      --table-row-selected: rgba(20, 184, 166, 0.16);
+      --table-row-selected-hover: rgba(20, 184, 166, 0.26);
+      --table-row-editing: rgba(234, 179, 8, 0.16);
+      --table-row-drag: rgba(30, 58, 138, 0.45);
+      --table-border-accent: #334155;
+    }
+
+    [data-theme="dark"] .app-header {
+      background: rgba(17, 24, 39, 0.95);
+    }
+
+    [data-theme="dark"] .checkout-bar {
+      background: rgba(17, 24, 39, 0.96);
+    }
+
+    [data-theme="dark"] .metric-card,
+    [data-theme="dark"] .custom-check,
+    [data-theme="dark"] .table-container,
+    [data-theme="dark"] dialog.app-modal,
+    [data-theme="dark"] .modal-footer,
+    [data-theme="dark"] .search-bar,
+    [data-theme="dark"] .category-filter-select,
+    [data-theme="dark"] .table-input,
+    [data-theme="dark"] .unit-selector,
+    [data-theme="dark"] .category-row-select,
+    [data-theme="dark"] .form-control {
+      background-color: var(--surface);
+      color: var(--text-main);
+    }
+
+    [data-theme="dark"] .category-header-row {
+      background-color: var(--surface-subtle) !important;
+    }
+
+    [data-theme="dark"] .data-table th {
+      background-color: var(--surface-subtle);
+      color: var(--text-muted);
+    }
+
+    .activity-log-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.65rem 0.75rem;
+      border-radius: var(--radius-sm);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+    }
+    .activity-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+    }
+    .badge-add { background: var(--success-soft); color: var(--success); }
+    .badge-del { background: var(--danger-soft); color: var(--danger); }
+    .badge-edit { background: var(--primary-soft); color: var(--primary); }
+    .badge-clone { background: var(--warning-soft); color: var(--warning); }
+    .activity-info { flex: 1; min-width: 0; }
+    .activity-title { font-weight: 600; color: var(--text-main); font-size: 0.88rem; }
+    .activity-detail { color: var(--text-muted); font-size: 0.8rem; margin-top: 0.15rem; word-break: break-word; }
+    .activity-time { font-size: 0.75rem; color: var(--text-subtle); white-space: nowrap; }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-ur);
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea {
+      font-family: var(--font-ur);
+    }
+
+    .app-header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-container {
+      max-width: 1350px;
+      margin-inline: auto;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), #14b8a6);
+      border-radius: var(--radius-md);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+    .btn-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .btn-icon:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .btn-toggle-bulk {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--primary);
+      background: var(--surface);
+      color: var(--primary);
+      font-family: var(--font-ur);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-toggle-bulk:hover { background: var(--primary-soft); }
+    .btn-toggle-bulk.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 6px var(--primary-glow);
+    }
+
+    .container {
+      max-width: 1350px;
+      width: 100%;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+    }
+
+    .dashboard-section { margin-block-start: 1.2rem; }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .metric-card {
+      padding: 0.6rem 0.8rem;
+      border-radius: var(--radius-md);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 72px;
+    }
+    .metric-value {
+      font-family: var(--font-en);
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .metric-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-block-start: 0.25rem;
+    }
+    .metric-total .metric-value { color: var(--primary); }
+    .metric-budget-input {
+      width: min(100%, 150px);
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      padding: 0.12rem 0.25rem;
+      background: transparent;
+      color: var(--text-main);
+      text-align: center;
+      font-family: var(--font-en);
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      outline: none;
+    }
+    .metric-budget-input:focus {
+      border-color: var(--border-focus);
+      background: #fff;
+      box-shadow: 0 0 0 2px var(--primary-glow);
+    }
+    .metric-ok .metric-value { color: var(--success); }
+    .metric-over .metric-value { color: var(--danger); }
+    @media (max-width: 760px) {
+      .dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    .controls-section {
+      margin-block-start: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .search-bar {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.55rem 0.85rem 0.55rem 2.2rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-ur);
+      font-size: 0.9rem;
+      background: var(--surface);
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+    .search-icon {
+      position: absolute;
+      inset-inline-end: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+    .search-icon svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; fill: none; }
+    
+    .filter-pills { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .pill {
+      padding: 0.38rem 0.8rem;
+      border-radius: 9999px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: var(--font-ur);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pill:hover { border-color: var(--primary); color: var(--primary); }
+    .pill.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .category-filter-select {
+      padding: 0.45rem 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-ur);
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--surface);
+      color: var(--text-main);
+      outline: none;
+      cursor: pointer;
+    }
+    .category-filter-select:focus { border-color: var(--border-focus); }
+
+    .active-template-badge {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      background: #ecfdf5;
+      border: 1.5px solid var(--success);
+      color: #065f46;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .active-template-badge.show { display: inline-flex; }
+    .btn-clear-active-tmpl {
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0 0.2rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .btn-add-primary {
+      padding: 0.55rem 1.15rem;
+      border-radius: var(--radius-md);
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-family: var(--font-ur);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+    .btn-add-primary svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+    .btn-add-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 10px var(--primary-glow);
+      transform: translateY(-1px);
+    }
+
+    .table-section {
+      margin-block-start: 1rem;
+      margin-block-end: 7.5rem;
+    }
+    .table-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+    .data-table {
+      width: 100%;
+      min-width: 1040px;
+      table-layout: fixed;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: start;
+    }
+    .data-table thead th {
+      background: var(--surface-subtle);
+      border-block-end: 1.5px solid var(--border);
+      padding: 0.65rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .data-table thead th.text-start {
+      text-align: start;
+      padding-inline-start: 0.8rem;
+    }
+    
+    .data-table thead th.col-name, .data-table td.col-name { width: 40%; text-align: start; }
+    .data-table thead th.col-qty, .data-table td.col-qty { width: 15%; }
+    .data-table thead th.col-rate, .data-table td.col-rate { width: 12%; }
+    .data-table thead th.col-amt, .data-table td.col-amt { width: 12%; }
+    .data-table thead th.col-qty, .data-table td.col-qty,
+    .data-table thead th.col-rate, .data-table td.col-rate,
+    .data-table thead th.col-amt, .data-table td.col-amt {
+      border-inline-start: 1px solid var(--border);
+    }
+
+    .data-table tr.category-header-row {
+      background: var(--surface-subtle);
+      border-block-start: 2px solid var(--table-border-accent);
+      border-block-end: 1.5px solid var(--table-border-accent);
+    }
+    .category-header-cell {
+      padding: 0.6rem 0.9rem !important;
+      text-align: start !important;
+    }
+    .category-header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .category-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .category-badge {
+      font-size: 0.72rem;
+      font-family: var(--font-en);
+      background: rgba(15, 118, 110, 0.1);
+      color: var(--primary);
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+    .category-subtotal {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .category-subtotal-val {
+      font-family: var(--font-en);
+      font-weight: 700;
+      color: var(--text-main);
+      margin-inline-start: 0.25rem;
+    }
+
+    .data-table tbody tr:not(.category-header-row) {
+      border-block-end: 1px solid var(--border);
+      transition: background-color 0.15s ease;
+    }
+    .data-table tbody tr:not(.category-header-row):hover { background-color: var(--table-row-hover); }
+    .data-table tbody tr.is-selected { background-color: var(--table-row-selected); }
+    .data-table tbody tr.is-selected:hover { background-color: var(--table-row-selected-hover); }
+    .data-table tbody tr.is-editing { background-color: var(--table-row-editing) !important; }
+    .data-table tbody tr.is-dragging {
+      opacity: 0.45;
+      background: var(--table-row-drag) !important;
+      outline: 2px dashed var(--primary);
+    }
+    .data-table tbody tr.drag-over {
+      border-block-start: 3px solid var(--primary) !important;
+      background: var(--table-row-hover);
+    }
+    
+    .data-table td {
+      padding: 0.5rem 0.4rem;
+      vertical-align: middle;
+    }
+
+    .drag-cell {
+      width: 36px;
+      cursor: grab;
+      color: var(--text-subtle);
+      font-size: 1.25rem;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      text-align: center;
+      transition: color 0.15s;
+    }
+    .drag-cell:active, .drag-cell:hover {
+      cursor: grabbing;
+      color: var(--primary);
+    }
+
+    .custom-check {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      margin-inline: auto;
+      transition: all 0.15s;
+    }
+    tr.is-selected .custom-check { background: var(--primary); border-color: var(--primary); }
+    .custom-check svg {
+      width: 12px;
+      height: 12px;
+      stroke: #fff;
+      stroke-width: 3;
+      fill: none;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: all 0.15s;
+    }
+    tr.is-selected .custom-check svg { opacity: 1; transform: scale(1); }
+
+    .item-name-text {
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: start;
+      padding-inline-start: 0.5rem;
+    }
+    .item-identity {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      column-gap: 0.42rem;
+      row-gap: 0.12rem;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+    .item-identity-name { font-weight: 700; color: var(--text-main); }
+    .item-identity-detail { color: var(--text-muted); font-size: 0.82rem; }
+    .item-identity-separator { color: var(--text-muted); font-size: 0.78em; margin-inline: 0.1rem; }
+    .identity-edit-fields { display: grid; gap: 0.35rem; }
+    .identity-edit-secondary { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 0.8fr); gap: 0.35rem; }
+    .identity-edit-fields > .table-input, .identity-edit-secondary > .table-input, .identity-edit-fields > select { width: 100%; min-width: 0; }
+    .identity-edit-size { display: flex; gap: 0.25rem; min-width: 0; }
+    .identity-edit-size input { width: 5.5rem; min-width: 0; }
+    .identity-edit-size select { min-width: 0; flex: 1; }
+    .read-only-text {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: start;
+    }
+
+    .qty-unit-trigger {
+      appearance: none;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      padding: 0.22rem 0.48rem;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-family: var(--font-ur);
+      font-size: 0.8rem;
+      font-weight: 700;
+      line-height: 1.5;
+      cursor: pointer;
+      transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+    }
+    .qty-unit-trigger:hover {
+      background: var(--table-row-selected-hover);
+      border-color: var(--border-focus);
+      color: var(--primary-hover);
+    }
+    .qty-unit-trigger:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    .table-input {
+      padding: 0.35rem 0.4rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      outline: none;
+      background: var(--surface-subtle);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .table-input:focus {
+      border-color: var(--border-focus);
+      background: var(--surface);
+      box-shadow: 0 0 0 2px var(--primary-glow);
+    }
+    
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] { -moz-appearance: textfield; }
+
+    .table-input.num-field { 
+      font-family: var(--font-en); 
+      text-align: center;
+    }
+
+    .qty-cell-inner {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.35rem;
+      width: 100%;
+    }
+    .qty-cell-inner input {
+      width: 65px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .qty-cell-inner select, .qty-cell-inner span, .qty-cell-inner .qty-unit-trigger {
+      flex: 1;
+      text-align: start;
+    }
+
+    .rate-cell-inner {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.45rem;
+      width: 100%;
+      padding-inline: 0.25rem;
+    }
+    .rate-cell-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.4rem;
+    }
+    .rate-text-val {
+      font-family: var(--font-en);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: start;
+      flex: 0 1 auto;
+    }
+
+    .amount-display {
+      font-family: var(--font-en);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: end;
+      display: block;
+      padding-inline-end: 0.5rem;
+    }
+
+    .action-flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+    .row-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .row-btn svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; }
+    .row-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+    .row-btn.btn-save { color: var(--success); border-color: var(--success); }
+    .row-btn.btn-save:hover { background: var(--success-soft); }
+    .row-btn.btn-copy { color: var(--primary); border-color: var(--primary); }
+    .row-btn.btn-copy:hover { background: var(--primary-soft); }
+    .row-btn.btn-del { color: var(--danger); border-color: var(--danger); }
+    .row-btn.btn-del:hover { background: var(--danger-soft); }
+    .row-btn.btn-log { color: var(--warning); border-color: var(--border); }
+    .row-btn.btn-log:hover { background: var(--warning-soft); border-color: var(--warning); }
+
+    .checkout-bar {
+      position: fixed;
+      inset-inline: 0;
+      bottom: 0;
+      background: var(--surface);
+      backdrop-filter: blur(14px);
+      border-block-start: 1px solid var(--border);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+      padding: 0.8rem 1.25rem;
+      z-index: 100;
+    }
+    .checkout-inner {
+      max-width: 1350px;
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .checkout-total { display: flex; flex-direction: column; }
+    .checkout-label { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
+    .checkout-amount {
+      font-family: var(--font-en);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .checkout-actions { display: flex; gap: 0.5rem; }
+    .btn-action {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-ur);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary {
+      background: var(--surface-subtle);
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); color: var(--text-main); }
+
+    dialog.app-modal {
+      margin: auto;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      max-width: 520px;
+      width: 90%;
+      background: var(--surface);
+      color: var(--text-main);
+    }
+    dialog.app-modal::backdrop {
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+    }
+    .modal-header {
+      padding: 1rem 1.25rem;
+      border-block-end: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h2 { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
+    .modal-body {
+      padding: 1.25rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+    
+    .form-group { margin-block-end: 1rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-block-end: 0.35rem;
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-ur);
+      font-size: 0.88rem;
+      outline: none;
+      background: var(--surface-subtle);
+      transition: all 0.2s;
+    }
+    .form-control:focus {
+      border-color: var(--border-focus);
+      background: #fff;
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .modal-footer {
+      padding: 0.85rem 1.25rem;
+      border-block-start: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+
+    .cat-input-group {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .btn-cat-plus {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .btn-cat-plus:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .cat-manager-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .cat-manager-row:hover {
+      background: var(--table-row-hover);
+      border-color: var(--border-focus);
+    }
+    .cat-manager-row.cat-dragging {
+      opacity: 0.45;
+      background: var(--table-row-drag);
+      outline: 2px dashed var(--primary);
+    }
+    .cat-manager-row.cat-drag-over {
+      border-block-start: 3px solid var(--primary);
+      background: var(--table-row-hover);
+    }
+    .cat-row-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .cat-drag-handle {
+      cursor: grab;
+      color: var(--text-subtle);
+      font-size: 1.25rem;
+      padding: 0.2rem 0.35rem;
+      line-height: 1;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      transition: color 0.15s;
+    }
+    .cat-drag-handle:active, .cat-drag-handle:hover {
+      cursor: grabbing;
+      color: var(--primary);
+    }
+    .cat-row-title {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 0.88rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cat-row-count {
+      font-size: 0.72rem;
+      font-family: var(--font-en);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .cat-row-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .modal-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-block: 0.5rem;
+      font-size: 0.82rem;
+    }
+    .modal-table th, .modal-table td {
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.6rem;
+      text-align: start;
+    }
+    .modal-table th { background: var(--surface-subtle); color: var(--text-main); }
+
+    .history-list {
+      list-style: none;
+      position: relative;
+      padding-inline-start: 1.25rem;
+    }
+    .history-list::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 5px;
+      top: 5px;
+      bottom: 5px;
+      width: 2px;
+      background: var(--border);
+    }
+    .history-item {
+      position: relative;
+      margin-block-end: 0.85rem;
+    }
+    .history-item::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: -1.25rem;
+      top: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    .history-date { font-size: 0.72rem; color: var(--text-subtle); font-family: var(--font-en); }
+    .history-rate { font-size: 0.95rem; font-weight: 700; color: var(--text-main); font-family: var(--font-en); }
+
+    .print-option-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: all 0.2s;
+    }
+    .print-option-card:hover {
+      border-color: var(--primary);
+      background: var(--surface-subtle);
+    }
+    .print-option-card input[type="radio"] {
+      margin-top: 0.25rem;
+      accent-color: var(--primary);
+    }
+    .print-option-text h4 {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+    .print-option-text p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .template-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.8rem;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.5rem;
+    }
+    .template-item-info h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .template-item-info span {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: var(--font-en);
+    }
+    .template-item-actions {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    /* -------------------------------------------------------------
+       DEDICATED STATIC PRINT CANVAS (پرنٹ لے آؤٹ)
+       ------------------------------------------------------------- */
+    #printWrapper {
+      display: none;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 1.2cm 1cm 1.5cm 1cm;
+      @bottom-left {
+        content: "صفحہ " counter(page) " از " counter(pages);
+        font-family: 'Noto Sans Arabic', sans-serif;
+        font-size: 8.5pt;
+        color: #333;
+      }
+      @bottom-right {
+        content: "گروسری خریداری فہرست · " attr(data-template-print);
+        font-family: 'Noto Sans Arabic', sans-serif;
+        font-size: 8.5pt;
+        color: #333;
+      }
+    }
+
+    @media print {
+      .app-header, 
+      main.container, 
+      footer.checkout-bar, 
+      dialog {
+        display: none !important;
+      }
+
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 9.5pt !important;
+      }
+
+      #printWrapper {
+        display: block !important;
+        width: 100% !important;
+      }
+
+      .p-slip-header {
+        border-bottom: 2px solid #0f766e;
+        padding-bottom: 0.45rem;
+        margin-bottom: 0.45rem;
+      }
+      .p-slip-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+      .p-slip-title h1 {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #134e4a;
+      }
+      .p-slip-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 8.5pt;
+        color: #334155;
+        margin-top: 0.3rem;
+      }
+      .p-slip-meta-left {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .p-meta-chip {
+        border: 1px solid #cbd5e1;
+        border-radius: 999px;
+        padding: 0.12rem 0.45rem;
+        background: #f8fafc;
+      }
+      table.p-summary-table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+        margin: 0.3rem 0 0.5rem;
+        font-size: 8.5pt;
+      }
+      table.p-summary-table td {
+        border: 0 !important;
+        padding: 0.18rem 0.28rem !important;
+        vertical-align: middle !important;
+      }
+      .p-summary-count, .p-summary-total {
+        border: 1px solid #99c9c3 !important;
+        border-radius: 4px;
+        background: #effaf8;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .p-summary-count { text-align: center !important; }
+      .p-summary-total { text-align: center !important; color: #134e4a; }
+      .p-summary-count strong, .p-summary-total strong { margin-inline-start: 0.25rem; }
+      table.p-table thead { display: table-header-group !important; }
+      table.p-table tfoot { display: table-footer-group !important; }
+      .p-print-footer { display: none !important; }
+      .p-mode-title { color: #475569; font-weight: 600; }
+      .p-date { color: #475569; font-size: 8.5pt; }
+      .p-item-name { font-weight: 700; }
+      .p-identity-separator { color: #475569; font-size: 0.78em; }
+      .p-table {
+        direction: rtl;
+      }
+
+      table.p-table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+        font-size: 9pt !important;
+      }
+      table.p-table th, table.p-table td {
+        border: 1px solid #cbd5e1 !important;
+        padding: 0.32rem 0.35rem !important;
+        vertical-align: middle !important;
+      }
+      table.p-table thead th {
+        background: #eaf3f2 !important;
+        color: #134e4a !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+      }
+      table.p-table thead th.t-start {
+        text-align: start !important;
+        padding-inline-start: 0.5rem !important;
+      }
+      
+      table.p-table tr.p-cat-row td {
+        background: #f1f5f9 !important;
+        border-top: 1px solid #94a3b8 !important;
+        font-weight: 800 !important;
+        font-size: 9.5pt !important;
+        padding: 0.4rem 0.6rem !important;
+        text-align: start !important;
+        break-after: avoid-page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid-page !important;
+      }
+      .p-cat-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      table.p-table tbody tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid-page !important;
+      }
+      
+      .t-center { text-align: center !important; }
+      .t-start { text-align: start !important; }
+      .t-end { text-align: end !important; }
+      .num-font { font-family: var(--font-en) !important; font-weight: 600 !important; }
+
+      .p-blank-box {
+        min-height: 20px;
+        display: block;
+      }
+
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DEDICATED CLEAN PRINT WRAPPER -->
+  <div id="printWrapper">
+    <div class="p-slip-header">
+      <div class="p-slip-title">
+        <h1>گروسری خریداری فہرست</h1>
+        <span class="p-date num-font" id="pDate"></span>
+      </div>
+      <div class="p-slip-meta">
+        <div class="p-slip-meta-left">
+          <span class="p-meta-chip">ٹیمپلیٹ: <strong id="pTemplateName">حسبِ ضرورت</strong></span>
+        </div>
+        <span class="p-mode-title" id="pModeTitle">شاپ کیپر لسٹ</span>
+      </div>
+    </div>
+
+    <table class="p-summary-table" aria-label="پرنٹ خلاصہ">
+      <colgroup>
+        <col style="width:5%"><col style="width:50%"><col style="width:14%"><col style="width:13%"><col style="width:18%">
+      </colgroup>
+      <tbody>
+        <tr>
+          <td></td><td></td>
+          <td class="p-summary-count">منتخب اشیاء: <strong class="num-font" id="pCount">0</strong></td>
+          <td></td>
+          <td class="p-summary-total" id="pSummaryTotalWrap">کل لاگت: <strong class="num-font" id="pSummaryTotalVal">0</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="p-table">
+      <colgroup>
+        <col style="width:5%"><col style="width:50%"><col style="width:14%"><col style="width:13%"><col style="width:18%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th style="width: 5%;">#</th>
+          <th class="t-start">نام کی تفصیل</th>
+          <th>مقدار</th>
+          <th>ریٹ</th>
+          <th>رقم</th>
+        </tr>
+      </thead>
+      <tbody id="pTableBody"></tbody>
+    </table>
+
+  </div>
+
+  <!-- INTERACTIVE WEB APPLICATION SCREEN -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>گروسری بجٹ پلانر</h1>
+        </div>
+      </div>
+      
+      <nav class="action-group" aria-label="ٹول بار">
+        <button type="button" class="btn-toggle-bulk" id="btnOpenTemplates" title="محفوظ ٹیمپلیٹس">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          ٹیمپلیٹس
+        </button>
+
+        <button type="button" class="btn-toggle-bulk" id="btnToggleBulk" title="سب خانے ایک ساتھ ایڈٹ کریں">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          بلک انٹری
+        </button>
+
+        <button type="button" class="btn-icon" id="btnGuide" title="پیمائش گائیڈ">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </button>
+
+        <button type="button" class="btn-icon" id="btnActivityLog" title="حالیہ سرگرمیاں / آڈٹ لاگ">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </button>
+        <button type="button" class="btn-icon" id="btnExport" title="بیک اپ محفوظ کریں">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+        <button type="button" class="btn-icon" id="btnImportTrigger" title="بیک اپ بحال کریں">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </button>
+        <input type="file" id="importFileInput" accept=".json,application/json" style="display: none;">
+        
+        <button type="button" class="btn-icon" id="btnPrintTrigger" title="پرنٹ / PDF بنائیں">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        </button>
+        
+        <button type="button" class="btn-icon" id="btnReset" title="فہرست ری سیٹ کریں">
+          <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+
+        <button type="button" class="btn-icon theme-toggle-btn" id="btnThemeToggle" title="ڈارک / لائٹ موڈ تبدیل کریں">
+          <svg class="sun-icon" viewBox="0 0 24 24" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="dashboard-section" aria-label="بجٹ سمری">
+      <div class="dashboard-grid">
+        <div class="metric-card">
+          <input type="number" id="budgetInput" class="metric-budget-input" value="0" min="0" step="1" aria-label="کل بجٹ">
+          <span class="metric-label">کل بجٹ</span>
+        </div>
+        <div class="metric-card" id="remainingCard">
+          <span class="metric-value" id="dispRemain">0</span>
+          <span class="metric-label">باقی بجٹ</span>
+        </div>
+        <div class="metric-card metric-total">
+          <span class="metric-value" id="dispTotal">0</span>
+          <span class="metric-label">کل لاگت</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-value" id="dispCount">0</span>
+          <span class="metric-label">منتخب اشیاء</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls-section" aria-label="تلاش اور فلٹرز">
+      <div class="search-bar">
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <input type="search" id="searchInput" class="search-input" placeholder="اشیاء یا کمپنی تلاش کریں..." autocomplete="off">
+      </div>
+      
+      <div style="display:flex; align-items:center; gap:0.35rem;">
+        <select id="categoryFilter" class="category-filter-select">
+          <option value="all">تمام کیٹیگریز</option>
+        </select>
+        <button type="button" class="btn-icon" id="btnOpenCatModalFromMain" title="کیٹیگریز کی ترتیب و انتظام">
+          <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="10" cy="18" r="2"/></svg>
+        </button>
+      </div>
+
+      <div class="filter-pills" role="tablist">
+        <button type="button" class="pill active" data-filter="all">سب اشیاء</button>
+        <button type="button" class="pill" data-filter="selected">منتخب</button>
+        <button type="button" class="pill" data-filter="unselected">غیر منتخب</button>
+      </div>
+
+      <div class="active-template-badge" id="activeTemplateBadge">
+        <span>فعال ٹیمپلیٹ: <strong id="activeTemplateNameText">—</strong></span>
+        <button type="button" class="btn-clear-active-tmpl" id="btnClearActiveTmpl" title="ٹیمپلیٹ موڈ سے باہر نکلیں">✕</button>
+      </div>
+
+      <button type="button" class="btn-add-primary" id="btnOpenAddModal">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        نیا آئٹم شامل کریں
+      </button>
+    </section>
+
+    <section class="table-section" aria-label="اشیاء کی تفصیلات">
+      <div class="table-container">
+        <table class="data-table" id="itemsTable">
+          <thead>
+            <tr>
+              <th style="width: 32px;" class="drag-cell" aria-label="ترتیب"></th>
+              <th style="width: 36px;" class="check-cell" aria-label="چیک باکس"></th>
+              <th style="width: 36px;">#</th>
+              <th class="text-start col-name">نام کی تفصیل <small>(نام، کمپنی اور سائز)</small></th>
+              <th class="text-start col-qty">مقدار</th>
+              <th class="text-start col-rate">ریٹ</th>
+              <th class="text-end col-amt" style="padding-inline-end: 1rem;">رقم</th>
+              <th style="width: 75px;" class="action-cell" aria-label="اختیارات">اختیارات</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="checkout-bar">
+    <div class="checkout-inner">
+      <div class="checkout-total">
+        <span class="checkout-label">منتخب اشیاء کی مکمل رقم</span>
+        <span class="checkout-amount" id="checkoutTotalVal">0</span>
+      </div>
+      <div class="checkout-actions">
+        <button type="button" class="btn-action btn-secondary" id="btnDeselectAll">سب غیر منتخب کریں</button>
+        <button type="button" class="btn-action btn-secondary" id="btnSelectAll">تمام منتخب کریں</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal: Templates Manager Modal -->
+  <dialog class="app-modal" id="templateModal">
+    <div class="modal-header">
+      <h2>📋 خریداری ٹیمپلیٹس مینیجر</h2>
+      <button type="button" class="btn-icon" id="btnCloseTemplateModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--surface-subtle); padding:0.75rem; border-radius:var(--radius-md); border:1.5px solid var(--border); margin-bottom:1rem;">
+        <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:0.35rem;">موجودہ منتخب لسٹ کو بطور نیا ٹیمپلیٹ محفوظ کریں:</label>
+        <div style="display:flex; gap:0.4rem;">
+          <input type="text" id="newTemplateName" class="form-control" placeholder="نام لکھیں (مثلاً: ماہانہ راشن، رمضان لسٹ)">
+          <button type="button" class="btn-add-primary" id="btnSaveNewTemplate" style="white-space:nowrap; padding:0.45rem 0.85rem;">محفوظ کریں</button>
+        </div>
+      </div>
+
+      <h4 style="font-size:0.85rem; font-weight:700; margin-bottom:0.5rem;">محفوظ شدہ ٹیمپلیٹس:</h4>
+      <div id="templateListBox"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-action btn-secondary" id="btnCloseTemplateFooter">بند کریں</button>
+    </div>
+  </dialog>
+
+  <!-- Modal: Print Selection Options Modal -->
+  <dialog class="app-modal" id="printModal">
+    <div class="modal-header">
+      <h2>🖨️ پرنٹ / PDF کے اختیارات</h2>
+      <button type="button" class="btn-icon" id="btnClosePrintModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:0.85rem; font-size:0.82rem; color:var(--text-subtle);">
+        براہ کرم پرنٹ کرنے کے لیے مطلوبہ فارمیٹ منتخب کریں:
+      </p>
+
+      <label class="print-option-card" for="optPrintBlank">
+        <input type="radio" name="printType" id="optPrintBlank" value="blank" checked>
+        <div class="print-option-text">
+          <h4>1. شاپ کیپر لسٹ (خالی ریٹ / Blank)</h4>
+          <p>ریٹ اور رقم کے خانے بالکل خالی رہیں گے تاکہ دکاندار خود قیمت لکھ سکے۔</p>
+        </div>
+      </label>
+
+      <label class="print-option-card" for="optPrintFull">
+        <input type="radio" name="printType" id="optPrintFull" value="full">
+        <div class="print-option-text">
+          <h4>2. مکمل لاگت لسٹ (مع ریٹ و رقم)</h4>
+          <p>آپ کے لکھے ہوئے تمام ریٹس، کیٹیگری سب ٹوٹل اور صفحے کے اوپر کل رقم پرنٹ ہوں گی۔</p>
+        </div>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-action btn-secondary" id="btnCancelPrint">منسوخ</button>
+      <button type="button" class="btn-add-primary" id="btnExecutePrint">
+        پرنٹ کریں / PDF ڈاؤن لوڈ کریں
+      </button>
+    </div>
+  </dialog>
+
+  <!-- Modal: Add New Item Dialog -->
+  <dialog class="app-modal" id="addItemModal">
+    <div class="modal-header">
+      <h2>＋ نیا گروسری آئٹم شامل کریں</h2>
+      <button type="button" class="btn-icon" id="btnCloseAddModal">✕</button>
+    </div>
+    <form id="addItemForm">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="new_name">آئٹم کا نام *</label>
+          <input type="text" id="new_name" class="form-control" required placeholder="مثلاً باسمتی چاول">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="new_category">کیٹیگری / گروپ</label>
+            <div class="cat-input-group">
+              <select id="new_category" class="form-control modal-category-target"></select>
+              <button type="button" class="btn-cat-plus" id="btnOpenCatModalFromAdd" title="کیٹیگریز کی ترتیب و انتظام">⚙️</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="new_company">کمپنی / برانڈ</label>
+            <input type="text" id="new_company" class="form-control" placeholder="مثلاً گارڈ">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="new_sizeVal">سائز ویلیو</label>
+            <input type="number" id="new_sizeVal" class="form-control" placeholder="مثلاً 500" min="0" step="any">
+          </div>
+          <div class="form-group">
+            <label for="new_sizeUnit">سائز کا یونٹ</label>
+            <select id="new_sizeUnit" class="form-control unit-options-target-empty"></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="new_qty">مقدار *</label>
+            <input type="number" id="new_qty" class="form-control" value="1" min="0.01" step="any" required>
+            <select id="new_qtyUnit" class="form-control" aria-label="مقدار کی اکائی">
+              <option value="گرام">گرام</option>
+              <option value="کلوگرام">کلوگرام</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="new_qtyType">مقدار کی قسم *</label>
+            <select id="new_qtyType" class="form-control">
+              <option value="weight">وزن (گرام / کلوگرام)</option>
+              <option value="volume">حجم (ملی لیٹر / لیٹر)</option>
+              <option value="count">عدد</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+            <label for="new_rate" id="newRateLabel">ریٹ (فی کلوگرام)</label>
+          <input type="number" id="new_rate" class="form-control" placeholder="0" min="0">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-action btn-secondary" id="btnCancelAdd">منسوخ</button>
+        <button type="submit" class="btn-add-primary">محفوظ کریں</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modal: Category Manager Modal -->
+  <dialog class="app-modal" id="categoryModal" style="max-width: 580px;">
+    <div class="modal-header">
+      <h2>📁 کیٹیگریز کی ترتیب و انتظام</h2>
+      <button type="button" class="btn-icon" id="btnCloseCatModal" title="بند کریں">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--surface-subtle); padding:0.75rem 0.9rem; border-radius:var(--radius-md); border:1.5px solid var(--border); margin-bottom:1rem;">
+        <label for="newCatModalInput" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:0.4rem;">نئی کیٹیگری شامل کریں:</label>
+        <div style="display:flex; gap:0.4rem;">
+          <input type="text" id="newCatModalInput" class="form-control" placeholder="نام درج کریں (مثلاً سبزی منڈی، ڈیری، بیکری)">
+          <button type="button" class="btn-add-primary" id="btnAddNewCatModal" style="white-space:nowrap; padding:0.45rem 0.85rem;">＋ شامل کریں</button>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem;">
+        <h4 style="font-size:0.82rem; font-weight:700; color:var(--text-main);">ترتیب بدلیں (ماؤس یا ٹچ سے ⠿ پکڑ کر اوپر نیچے گھسیٹیں):</h4>
+        <span style="font-size:0.75rem; color:var(--text-muted);" id="catTotalCountBadge">0 کیٹیگریز</span>
+      </div>
+
+      <div id="catManagerListBox" style="max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem; padding-inline-end: 0.2rem;"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-action btn-secondary" id="btnDoneCatModal">محفوظ کریں اور بند کریں</button>
+    </div>
+  </dialog>
+
+  <dialog class="app-modal" id="qtyUnitModal">
+    <div class="modal-header">
+      <h2>مقدار کی اکائی تبدیل کریں</h2>
+      <button type="button" class="btn-icon" id="btnCloseQtyUnitModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="qtyUnitModalDescription" style="margin-bottom:0.75rem;">مقدار نئی اکائی میں درست طور پر تبدیل ہوگی۔</p>
+      <label for="qtyUnitChoice">اکائی منتخب کریں</label>
+      <select id="qtyUnitChoice" class="form-control"></select>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-action btn-secondary" id="btnCancelQtyUnit">منسوخ</button>
+      <button type="button" class="btn-add-primary" id="btnApplyQtyUnit">تبدیلی منظور کریں</button>
+    </div>
+  </dialog>
+
+  <!-- Modal: Units Guide Dialog -->
+  <dialog class="app-modal" id="guideModal">
+    <div class="modal-header">
+      <h2>📏 پیمائش اور قیمت کا طریقہ</h2>
+      <button type="button" class="btn-icon" id="btnCloseGuide">✕</button>
+    </div>
+    <div class="modal-body">
+      <h3>وزن</h3>
+      <p style="margin-block:0.5rem 0.75rem;">آئٹم بناتے یا ایڈٹ کرتے وقت مقدار کی قسم منتخب کریں۔ مقدار کے ساتھ اکائی پر کلک کر کے اسی قسم کی چھوٹی یا بڑی اکائی چنیں۔ درج کیا ہوا عدد منتخب اکائی کے مطابق سمجھا جائے گا؛ اکائی بدلنے پر مقدار کا حقیقی وزن یا حجم برقرار رکھتے ہوئے عدد بھی تبدیل ہوگا۔</p>
+      <table class="modal-table">
+        <thead>
+          <tr><th>یونٹ</th><th>تبدیلی</th><th>ریٹ اور حساب</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>گرام</td><td>1000 گرام = 1 کلوگرام</td><td>ریٹ فی کلوگرام؛ مقدار کو کلوگرام میں بدل کر حساب ہوگا</td></tr>
+          <tr><td>کلوگرام</td><td>1 کلوگرام = 1000 گرام</td><td>ریٹ فی کلوگرام</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-block:0.5rem 1rem;">وزن کی مقدار گرام یا کلوگرام میں صارف کی منتخب کردہ اکائی کے مطابق رہے گی۔ اکائی بدلنے سے اصل مقدار تبدیل نہیں ہوگی۔</p>
+      <h3>غلط اکائی درج ہو جائے تو اصلاح</h3>
+      <p style="margin-block:0.5rem 1rem;">اگر اصل مقدار 500 گرام تھی لیکن 500 کلوگرام درج ہو گیا ہو، تو پہلے مقدار کے خانے میں 0.5 لکھیں جبکہ موجودہ اکائی کلوگرام ہو۔ پھر کلوگرام کے بٹن پر کلک کریں، گرام منتخب کریں اور تبدیلی منظور کریں؛ مقدار 500 گرام ہو جائے گی۔</p>
+      <h3>حجم</h3>
+      <table class="modal-table">
+        <thead><tr><th>یونٹ</th><th>تبدیلی</th><th>ریٹ اور حساب</th></tr></thead>
+        <tbody>
+          <tr><td>ملی لیٹر</td><td>1000 ملی لیٹر = 1 لیٹر</td><td>ریٹ فی لیٹر؛ مقدار کو لیٹر میں بدل کر حساب ہوگا</td></tr>
+          <tr><td>لیٹر</td><td>1 لیٹر = 1000 ملی لیٹر</td><td>ریٹ فی لیٹر</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-block:0.5rem 1rem;">حجم کی مقدار ملی لیٹر یا لیٹر میں صارف کی منتخب کردہ اکائی کے مطابق رہے گی۔</p>
+      <h3>عدد</h3>
+      <p>ریٹ فی عدد ہوگا؛ مقدار کو ریٹ سے ضرب دے کر رقم بنے گی۔</p>
+    </div>
+  </dialog>
+
+  <!-- Modal: Price History Log Modal -->
+  <dialog class="app-modal" id="priceHistoryModal">
+    <div class="modal-header">
+      <h2>📈 ریٹ لاگ / قیمتوں کی تاریخ</h2>
+      <button type="button" class="btn-icon" id="btnCloseHistoryModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <h3 id="historyItemName" style="color:var(--primary); margin-bottom:1rem;">—</h3>
+      <ul class="history-list" id="historyTimeline"></ul>
+      <div id="noHistoryMessage" style="display:none; text-align:center; padding:1.5rem 0; color:var(--text-subtle);">
+        اس آئٹم کا کوئی پرانا ریٹ ریکارڈ موجود نہیں ہے۔
+      </div>
+      <div id="historyActionsWrap" style="margin-top:1.25rem; display:flex; justify-content:flex-end; border-top:1px solid var(--border); padding-top:0.75rem;">
+        <button type="button" class="btn-secondary" id="btnClearHistoryBtn" style="color:var(--danger); border-color:var(--danger); font-size:0.85rem; padding:0.4rem 0.8rem; cursor:pointer;">
+          🗑️ پرانی ہسٹری صاف کریں
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal: Activity Log Modal -->
+  <dialog class="app-modal" id="activityLogModal" style="max-width: 560px;">
+    <div class="modal-header">
+      <h2>📋 حالیہ سرگرمیاں / آڈٹ لاگ</h2>
+      <button type="button" class="btn-icon" id="btnCloseActivityLogModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.82rem; color:var(--text-subtle); margin-bottom:0.85rem;">
+        اشیاء کے شامل ہونے، حذف ہونے اور بنیادی تبدیلیوں کا خودکار ریکارڈ (زیادہ سے زیادہ 50 اینٹریز)
+      </p>
+      <ul class="activity-log-list" id="activityLogTimeline" style="list-style:none; display:flex; flex-direction:column; gap:0.5rem; max-height:360px; overflow-y:auto; padding-inline-start:0;"></ul>
+      <div id="noActivityLogMessage" style="display:none; text-align:center; padding:1.5rem 0; color:var(--text-subtle);">
+        کوئی حالیہ سرگرمی ریکارڈ موجود نہیں ہے۔
+      </div>
+      <div id="activityLogActionsWrap" style="margin-top:1.25rem; display:flex; justify-content:flex-end; border-top:1px solid var(--border); padding-top:0.75rem;">
+        <button type="button" class="btn-secondary" id="btnClearActivityLogBtn" style="color:var(--danger); border-color:var(--danger); font-size:0.85rem; padding:0.4rem 0.8rem; cursor:pointer;">
+          🗑️ تمام سرگرمیاں صاف کریں
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const STORAGE_KEY = 'GROCERY_PLANNER_PRO_DATA_V29';
+      const TEMPLATES_KEY = 'GROCERY_PLANNER_TEMPLATES_V10';
+      const UNITS = ['گرام', 'کلوگرام', 'ملی لیٹر', 'لیٹر', 'عدد'];
+      const DEFAULT_CATEGORIES = ["کریانہ","ڈرائی فروٹس","مصالحہ جات","سبزی و فروٹ","گوشت و انڈے"];
+
+      const DEFAULT_ITEMS = [
+  {
+    "id": 130,
+    "name": "بناسپتی گھی",
+    "category": "کریانہ",
+    "company": "صوفی",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 8,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 82,
+    "name": "چاول",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 10,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 3,
+    "name": "چائے پتی",
+    "category": "کریانہ",
+    "company": "ٹپال دانے دار",
+    "sizeVal": 430,
+    "sizeUnit": "گرام",
+    "qty": 2,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 1,
+    "name": "چینی",
+    "category": "کریانہ",
+    "company": "شاہ تاج",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 10,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 6,
+    "name": "دال چنا",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 9,
+    "name": "دال مونگ",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 7,
+    "name": "دال ماش",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 10,
+    "name": "ثابت مسور (باریک)",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 8,
+    "name": "دال مسور",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 5,
+    "name": "سفید چنے",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 4,
+    "name": "کالے چنے",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 100,
+    "name": "لوبیہ سرخ",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 12,
+    "name": "نمک",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 4,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 83,
+    "name": "گڑ",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 25,
+    "name": "بریانی مصالہ",
+    "category": "کریانہ",
+    "company": "نیشنل",
+    "sizeVal": 78,
+    "sizeUnit": "گرام",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 41,
+    "name": "سوجی",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 11,
+    "name": "بیسن",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 129,
+    "name": "میدہ",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 16,
+    "name": "زیرہ سفید",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 18,
+    "name": "خشک دھنیہ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 22,
+    "name": "کالی مرچ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 125,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 17,
+    "name": "زیرہ کالا",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 19,
+    "name": "دار چینی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 15,
+    "name": "کالی الائچی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 21,
+    "name": "لونگ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 25,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 33,
+    "name": "سونٹھ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 20,
+    "name": "سبز الائچی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 25,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 29,
+    "name": "جائفل",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 25,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 30,
+    "name": "جاوتری",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 25,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 28,
+    "name": "بادیاں خطائی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 25,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 26,
+    "name": "تیزپات",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 25,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 31,
+    "name": "فلفل دراز",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 25,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 32,
+    "name": "کباب چینی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 25,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 24,
+    "name": "بیر مرچ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 27,
+    "name": "کڑی پتہ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 0,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 23,
+    "name": "سفید مرچ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 0,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 34,
+    "name": "قصوری میتھی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 0,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 35,
+    "name": "ہینگ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 0,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 13,
+    "name": "سرخ مرچ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 14,
+    "name": "ہلدی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 36,
+    "name": "سرکہ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": 750,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 133,
+    "name": "کسٹرڈ (ونیلا)",
+    "category": "کریانہ",
+    "company": "رفان",
+    "sizeVal": 275,
+    "sizeUnit": "گرام",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 131,
+    "name": "سویاں باریک",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 132,
+    "name": "سویاں موٹی",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 37,
+    "name": "اچار",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 49,
+    "name": "سونف",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 38,
+    "name": "کلونجی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 0,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 39,
+    "name": "میتھی دانہ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 0,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 50,
+    "name": "اجوائن",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 40,
+    "name": "انار دانہ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 102,
+    "name": "کھجور",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 42,
+    "name": "کشمش",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 46,
+    "name": "گری",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 47,
+    "name": "املی",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 48,
+    "name": "آلو بخارا خشک",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 50,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 61,
+    "name": "ماچس / لائٹر",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 12,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 58,
+    "name": "شیمپو",
+    "category": "کریانہ",
+    "company": "پینٹین",
+    "sizeVal": 360,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 2,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 134,
+    "name": "باتھ صابن بار",
+    "category": "کریانہ",
+    "company": "کیپری",
+    "sizeVal": 120,
+    "sizeUnit": "گرام",
+    "qty": 10,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 53,
+    "name": "واشنگ پاؤڈر",
+    "category": "کریانہ",
+    "company": "سرف ایکسل",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 2,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 135,
+    "name": "کلاتھ صابن بار",
+    "category": "کریانہ",
+    "company": "402",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 2,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 137,
+    "name": "کراکری صابن لیکوڈ",
+    "category": "کریانہ",
+    "company": "لیمن میکس",
+    "sizeVal": 750,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 136,
+    "name": "کراکری صابن بار",
+    "category": "کریانہ",
+    "company": "لیمن میکس",
+    "sizeVal": 170,
+    "sizeUnit": "گرام",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 142,
+    "name": "ٹائلٹ کلینر",
+    "category": "کریانہ",
+    "company": "ہارپک پاور پلس",
+    "sizeVal": 900,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 140,
+    "name": "شوپالش براؤن",
+    "category": "کریانہ",
+    "company": "پاور پلس",
+    "sizeVal": 75,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 2,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 141,
+    "name": "شوپالش بلیک",
+    "category": "کریانہ",
+    "company": "پاور پلس",
+    "sizeVal": 75,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 2,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 71,
+    "name": "مچھر سپرے",
+    "category": "کریانہ",
+    "company": "کنگ ٹاکس",
+    "sizeVal": 600,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 138,
+    "name": "بلیچ لیکوڈ",
+    "category": "کریانہ",
+    "company": "روبن",
+    "sizeVal": 500,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 139,
+    "name": "نیل لیکوڈ",
+    "category": "کریانہ",
+    "company": "روبن",
+    "sizeVal": 75,
+    "sizeUnit": "ملی لیٹر",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 66,
+    "name": "توتھ پیسٹ",
+    "category": "کریانہ",
+    "company": "کولگیٹ",
+    "sizeVal": 150,
+    "sizeUnit": "گرام",
+    "qty": 2,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 65,
+    "name": "توتھ برش",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 55,
+    "name": "کلف",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 62,
+    "name": "جھاڑو",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 63,
+    "name": "وائپر",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 64,
+    "name": "برش",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 67,
+    "name": "کنگھا",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 68,
+    "name": "ٹشو پیپر",
+    "category": "کریانہ",
+    "company": "روز پیٹل پاپ اپ",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 69,
+    "name": "ہیر آئل",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 70,
+    "name": "نیل کٹر",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 72,
+    "name": "پیاز",
+    "category": "سبزی و فروٹ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 20,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 73,
+    "name": "آلو",
+    "category": "سبزی و فروٹ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 20,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 74,
+    "name": "لہسن",
+    "category": "سبزی و فروٹ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 75,
+    "name": "ادرک",
+    "category": "سبزی و فروٹ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 76,
+    "name": "سبزی",
+    "category": "سبزی و فروٹ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 20,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 77,
+    "name": "مٹن / بیف / قیمہ",
+    "category": "گوشت و انڈے",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 2,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 78,
+    "name": "چکن",
+    "category": "گوشت و انڈے",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 6,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 79,
+    "name": "انڈے",
+    "category": "گوشت و انڈے",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 60,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 80,
+    "name": "فروٹ",
+    "category": "سبزی و فروٹ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 4,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 81,
+    "name": "دودھ",
+    "category": "",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 124,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 101,
+    "name": "انجیر",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 143,
+    "name": "چھوھارے",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 144,
+    "name": "مونگ پھلی",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 103,
+    "name": "بادام چھلکے والا",
+    "category": "ڈرائی فروٹس",
+    "company": "گر بندی / ممرہ",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 145,
+    "name": "اخروٹ چھلکے والا",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "کلوگرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 146,
+    "name": "پستہ چھلکے والا سادہ",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 147,
+    "name": "کاجوسادہ",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 148,
+    "name": "کاجو بھنا",
+    "category": "ڈرائی فروٹس",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 500,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 107,
+    "name": "سپرے بوتل",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 149,
+    "name": "دلیہ جو",
+    "category": "کریانہ",
+    "company": "فوجی",
+    "sizeVal": 250,
+    "sizeUnit": "گرام",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 109,
+    "name": "چلکا اسپغول",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 110,
+    "name": "چیا سیڈ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 111,
+    "name": "قنوا",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 112,
+    "name": "مورنگا پاؤڈر",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 150,
+    "name": "کوکا کولا",
+    "category": "کریانہ",
+    "company": "کوکا کولا",
+    "sizeVal": 1.5,
+    "sizeUnit": "لیٹر",
+    "qty": 6,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 151,
+    "name": "سپرائٹ",
+    "category": "کریانہ",
+    "company": "کوکا کولا",
+    "sizeVal": 1.5,
+    "sizeUnit": "لیٹر",
+    "qty": 6,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 113,
+    "name": "جوس",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 4,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 114,
+    "name": "بسکٹ",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 4,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 115,
+    "name": "سٹرک ایسڈ",
+    "category": "کریانہ",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 125,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 118,
+    "name": "خمیر",
+    "category": "کریانہ",
+    "company": "روز مور",
+    "sizeVal": 33,
+    "sizeUnit": "گرام",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 116,
+    "name": "بیکنگ پوڈر",
+    "category": "کریانہ",
+    "company": "روز مور",
+    "sizeVal": 100,
+    "sizeUnit": "گرام",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 117,
+    "name": "میٹھا سوڈا",
+    "category": "کریانہ",
+    "company": "روز مور",
+    "sizeVal": 100,
+    "sizeUnit": "گرام",
+    "qty": 1,
+    "qtyUnit": "عدد",
+    "qtyType": "count",
+    "rate": 0,
+    "priceHistory": []
+  },
+  {
+    "id": 119,
+    "name": "ساگودانہ",
+    "category": "مصالحہ جات",
+    "company": "",
+    "sizeVal": "",
+    "sizeUnit": "",
+    "qty": 250,
+    "qtyUnit": "گرام",
+    "qtyType": "weight",
+    "rate": 0,
+    "priceHistory": []
+  }
+];
+
+      const UNIT_INFO = {
+        'گرام': { group: 'weight', baseFactor: 1 },
+        'کلوگرام': { group: 'weight', baseFactor: 1000 },
+        'ملی لیٹر': { group: 'volume', baseFactor: 1 },
+        'لیٹر': { group: 'volume', baseFactor: 1000 },
+        'عدد': { group: 'count', baseFactor: 1 }
+      };
+
+      const QUANTITY_TYPES = {
+        weight: { group: 'weight', smallUnit: 'گرام', largeUnit: 'کلوگرام' },
+        volume: { group: 'volume', smallUnit: 'ملی لیٹر', largeUnit: 'لیٹر' },
+        count: { group: 'count', smallUnit: 'عدد', largeUnit: 'عدد' }
+      };
+
+      const getQuantityType = unit => {
+        const group = getUnitGroup(unit);
+        return group === 'weight' ? 'weight' : group === 'volume' ? 'volume' : 'count';
+      };
+
+      const getQuantityUnit = (value, type) => {
+        const config = QUANTITY_TYPES[type] || QUANTITY_TYPES.weight;
+        const amount = Number(value);
+        return { value: Number.isFinite(amount) ? roundMeasurement(amount) : 0, unit: config.smallUnit };
+      };
+
+      const roundMeasurement = value => Number(value.toFixed(6));
+
+      const getUnitGroup = unit => UNIT_INFO[unit]?.group || null;
+
+      const normalizeMeasurement = (value, unit) => {
+        let amount = Number(value);
+        let selectedUnit = unit || '';
+        if (!Number.isFinite(amount) || !selectedUnit) return { value, unit: selectedUnit };
+
+        const info = UNIT_INFO[selectedUnit];
+        if (!info) throw new Error(`غیر معاون اکائی: ${selectedUnit}`);
+        if (info.group === 'count' || amount <= 0) return { value: amount, unit: selectedUnit };
+
+        const baseAmount = amount * info.baseFactor;
+        const smallUnit = info.group === 'weight' ? 'گرام' : 'ملی لیٹر';
+        const largeUnit = info.group === 'weight' ? 'کلوگرام' : 'لیٹر';
+        const normalizedUnit = baseAmount < 1000 ? smallUnit : largeUnit;
+        const normalizedFactor = UNIT_INFO[normalizedUnit].baseFactor;
+        return { value: roundMeasurement(baseAmount / normalizedFactor), unit: normalizedUnit };
+      };
+
+      const convertMeasurement = (value, fromUnit, toUnit) => {
+        const amount = Number(value);
+        if (!Number.isFinite(amount) || !fromUnit || !toUnit) return value;
+        const fromInfo = UNIT_INFO[fromUnit];
+        const toInfo = UNIT_INFO[toUnit];
+        if (!fromInfo || !toInfo || fromInfo.group !== toInfo.group) return value;
+        return roundMeasurement(amount * fromInfo.baseFactor / toInfo.baseFactor);
+      };
+
+      const normalizeItemUnits = item => {
+        const normalized = { ...item, category: item.category || '', priceHistory: Array.isArray(item.priceHistory) ? item.priceHistory : [] };
+        normalized.qtyUnit = normalized.qtyUnit || 'کلوگرام';
+        if (!UNIT_INFO[normalized.qtyUnit]) throw new Error(`غیر معاون اکائی: ${normalized.qtyUnit}`);
+        normalized.qty = roundMeasurement(Number(normalized.qty) || 0);
+        normalized.qtyType = getQuantityType(normalized.qtyUnit);
+
+        if (normalized.sizeUnit) {
+          const size = normalizeMeasurement(normalized.sizeVal, normalized.sizeUnit);
+          normalized.sizeVal = size.value;
+          normalized.sizeUnit = size.unit;
+        }
+        return normalized;
+      };
+
+      const normalizeItemList = items => items.map(normalizeItemUnits);
+
+      const getRateBasisLabel = unit => {
+        const group = getUnitGroup(unit);
+        if (group === 'weight') return 'فی کلوگرام';
+        if (group === 'volume') return 'فی لیٹر';
+        return 'فی عدد';
+      };
+
+      const getNextItemId = (items, ...reservedIds) => {
+        const maxExistingId = items.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0);
+        const validReservedIds = reservedIds
+          .map(Number)
+          .filter(id => Number.isSafeInteger(id) && id > 0);
+        return Math.max(maxExistingId + 1, ...validReservedIds);
+      };
+
+      const MAX_ACTIVITY_LOGS = 50;
+
+      let state = {
+        items: [],
+        categories: [],
+        selected: {},
+        budget: 0,
+        nextItemId: getNextItemId(DEFAULT_ITEMS),
+        activityLog: []
+      };
+
+      let templates = [];
+      let activeTemplateName = null;
+      let filterMode = 'all';
+      let selectedCategory = 'all';
+      let searchQuery = '';
+      let currentlyEditingId = null;
+      let isBulkEditMode = false;
+      let draggedItemId = null;
+      let qtyUnitTargetId = null;
+
+      const loadState = () => {
+        let migratedState = false;
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed.items)) {
+              const normalizedItems = normalizeItemList(parsed.items);
+              migratedState = normalizedItems.some((item, index) =>
+                item.qty !== parsed.items[index].qty || item.qtyUnit !== (parsed.items[index].qtyUnit || 'کلوگرام') ||
+                item.qtyType !== parsed.items[index].qtyType ||
+                item.sizeVal !== parsed.items[index].sizeVal || item.sizeUnit !== (parsed.items[index].sizeUnit || '')
+              );
+              state = {
+                items: normalizedItems,
+                categories: Array.isArray(parsed.categories) ? parsed.categories : [],
+                selected: parsed.selected || {},
+                budget: Math.max(0, Number(parsed.budget) || 0),
+                nextItemId: getNextItemId(normalizedItems, parsed.nextItemId),
+                activityLog: Array.isArray(parsed.activityLog) ? parsed.activityLog.slice(0, MAX_ACTIVITY_LOGS) : []
+              };
+              if (state.nextItemId !== parsed.nextItemId) migratedState = true;
+            }
+          } else {
+            state = {
+              items: normalizeItemList(JSON.parse(JSON.stringify(DEFAULT_ITEMS))),
+              categories: DEFAULT_CATEGORIES,
+              selected: {},
+              budget: 0,
+              nextItemId: getNextItemId(DEFAULT_ITEMS),
+              activityLog: []
+            };
+          }
+
+          const rawTemplates = localStorage.getItem(TEMPLATES_KEY);
+          if (rawTemplates) {
+            templates = JSON.parse(rawTemplates) || [];
+          }
+          if (migratedState) saveState();
+        } catch (e) {
+          console.warn('Storage load error:', e);
+        }
+      };
+
+      const saveState = () => {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          console.error('Storage error:', e);
+        }
+      };
+
+      const saveTemplates = () => {
+        try {
+          localStorage.setItem(TEMPLATES_KEY, JSON.stringify(templates));
+        } catch (e) {
+          console.error('Templates storage error:', e);
+        }
+      };
+
+      const formatNumber = num => Number(num).toLocaleString('en-PK');
+
+      // ------------------------------------------------------------------
+      // Market Math Logic
+      // Weight uses a per-kilogram rate, volume a per-liter rate, and count a per-item rate.
+      // ------------------------------------------------------------------
+      const UNIT_MULTIPLIERS = {
+        'گرام': 0.001,
+        'کلوگرام': 1,
+        'ملی لیٹر': 0.001,
+        'لیٹر': 1,
+        'عدد': 1
+      };
+
+      const getDisplayRate = (item) => {
+        const r = parseFloat(item.rate) || 0;
+        return r > 0 ? r : 0;
+      };
+
+      const calculateItemAmount = (item) => {
+        const r = parseFloat(item.rate) || 0;
+        const q = parseFloat(item.qty) || 0;
+        if (r <= 0 || q <= 0) return 0;
+
+        const mult = UNIT_MULTIPLIERS[item.qtyUnit] ?? 1;
+        return Math.round(q * mult * r);
+      };
+
+      // ------------------------------------------------------------------
+
+      const escapeHTML = str => {
+        const div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+      };
+
+      const autoResizeInput = (input) => {
+        if (!input) return;
+        const len = (input.value != null && String(input.value).length > 0)
+          ? String(input.value).length
+          : (input.placeholder || '').length;
+
+        if (input.classList.contains('num-field-6')) {
+          input.style.width = Math.max(len, 5) + 2 + 'ch';
+        } else {
+          input.style.width = Math.max(len, 3) + 2 + 'ch';
+        }
+      };
+
+      const getUnitOptionsHTML = (selectedVal, allowEmpty) => {
+        let opts = allowEmpty ? `<option value="" ${!selectedVal ? 'selected' : ''}>—</option>` : '';
+        return opts + UNITS.map(u => `<option value="${escapeHTML(u)}" ${u === selectedVal ? 'selected' : ''}>${escapeHTML(u)}</option>`).join('');
+      };
+
+      const getQuantityUnitOptionsHTML = (type, selectedUnit) => {
+        const config = QUANTITY_TYPES[type] || QUANTITY_TYPES.weight;
+        const units = config.group === 'count' ? [config.smallUnit] : [config.smallUnit, config.largeUnit];
+        return units.map(unit => `<option value="${escapeHTML(unit)}" ${unit === selectedUnit ? 'selected' : ''}>${escapeHTML(unit)}</option>`).join('');
+      };
+
+      const getCategoryOptionsHTML = (currentCat) => {
+        let html = `<option value="" ${!currentCat ? 'selected' : ''}>— (عام / بغیر کیٹیگری)</option>`;
+        state.categories.forEach(cat => {
+          html += `<option value="${escapeHTML(cat)}" ${cat === currentCat ? 'selected' : ''}>${escapeHTML(cat)}</option>`;
+        });
+        if (currentCat && !state.categories.includes(currentCat)) {
+          html += `<option value="${escapeHTML(currentCat)}" selected>${escapeHTML(currentCat)}</option>`;
+        }
+        return html;
+      };
+
+      const updateCategoryDropdowns = () => {
+        const filterEl = document.getElementById('categoryFilter');
+        const prevVal = filterEl.value;
+        
+        let filterHtml = '<option value="all">تمام کیٹیگریز</option><option value="uncategorized">بغیر کیٹیگری (عام)</option>';
+        state.categories.forEach(c => {
+          filterHtml += `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`;
+        });
+        filterEl.innerHTML = filterHtml;
+
+        if (state.categories.includes(prevVal) || prevVal === 'all' || prevVal === 'uncategorized') {
+          filterEl.value = prevVal;
+        } else {
+          filterEl.value = 'all';
+          selectedCategory = 'all';
+        }
+
+        document.querySelectorAll('.modal-category-target').forEach(el => {
+          el.innerHTML = getCategoryOptionsHTML(el.value || '');
+        });
+
+        renderCategoryManagerList();
+      };
+
+      let draggedCatIndex = null;
+
+      const renderCategoryManagerList = () => {
+        const listEl = document.getElementById('catManagerListBox');
+        const countBadge = document.getElementById('catTotalCountBadge');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        if (countBadge) {
+          countBadge.textContent = `${state.categories.length} کیٹیگریز`;
+        }
+
+        if (state.categories.length === 0) {
+          listEl.innerHTML = '<p style="font-size:0.82rem; color:var(--text-subtle); text-align:center; padding:1.5rem 0;">کوئی کیٹیگری موجود نہیں۔ اوپر نام لکھ کر شامل کریں۔</p>';
+          return;
+        }
+
+        state.categories.forEach((cat, index) => {
+          const itemCount = state.items.filter(it => it.category === cat).length;
+          const isFirst = index === 0;
+          const isLast = index === state.categories.length - 1;
+
+          const row = document.createElement('div');
+          row.className = 'cat-manager-row';
+          row.setAttribute('draggable', 'true');
+          row.dataset.index = index;
+
+          row.innerHTML = `
+            <div class="cat-row-left">
+              <span class="cat-drag-handle" title="ترتیب بدلنے کے لیے پکڑ کر اوپر نیچے گھسیٹیں">⠿</span>
+              <span class="cat-row-title">${escapeHTML(cat)}</span>
+              <span class="cat-row-count">${itemCount} آئٹم</span>
+            </div>
+            <div class="cat-row-actions">
+              <button type="button" class="row-btn" data-action="cat-edit" data-cat="${escapeHTML(cat)}" title="نام تبدیل کریں">
+                <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </button>
+              <button type="button" class="row-btn btn-del" data-action="cat-del" data-cat="${escapeHTML(cat)}" title="کیٹیگری ختم کریں">
+                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          `;
+
+          row.addEventListener('dragstart', e => {
+            draggedCatIndex = index;
+            row.classList.add('cat-dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', index);
+          });
+
+          row.addEventListener('dragend', () => {
+            row.classList.remove('cat-dragging');
+            listEl.querySelectorAll('.cat-manager-row').forEach(r => r.classList.remove('cat-drag-over'));
+            draggedCatIndex = null;
+          });
+
+          row.addEventListener('dragover', e => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            if (draggedCatIndex === null || draggedCatIndex === index) return;
+            row.classList.add('cat-drag-over');
+          });
+
+          row.addEventListener('dragleave', () => {
+            row.classList.remove('cat-drag-over');
+          });
+
+          row.addEventListener('drop', e => {
+            e.preventDefault();
+            row.classList.remove('cat-drag-over');
+            if (draggedCatIndex === null || draggedCatIndex === index) return;
+
+            const [movedCat] = state.categories.splice(draggedCatIndex, 1);
+            state.categories.splice(index, 0, movedCat);
+
+            saveState();
+            renderCategoryManagerList();
+            updateCategoryDropdowns();
+            renderTable();
+          });
+
+          listEl.appendChild(row);
+        });
+
+        if (!listEl.dataset.touchAttached) {
+          listEl.dataset.touchAttached = 'true';
+
+          listEl.addEventListener('touchstart', e => {
+            const handle = e.target.closest('.cat-drag-handle');
+            if (!handle) return;
+            const row = handle.closest('.cat-manager-row');
+            if (!row) return;
+
+            touchDraggedCatIdx = Number(row.dataset.index);
+            row.classList.add('cat-dragging');
+            if (navigator.vibrate) navigator.vibrate(30);
+          }, { passive: true });
+
+          listEl.addEventListener('touchmove', e => {
+            if (touchDraggedCatIdx === null) return;
+
+            const touch = e.touches[0];
+            const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+            const targetRow = elem ? elem.closest('.cat-manager-row') : null;
+
+            listEl.querySelectorAll('.cat-manager-row.cat-drag-over').forEach(r => r.classList.remove('cat-drag-over'));
+
+            if (targetRow && targetRow.parentElement === listEl) {
+              targetRow.classList.add('cat-drag-over');
+              currentTouchTargetCatRow = targetRow;
+              if (e.cancelable) e.preventDefault();
+            } else {
+              currentTouchTargetCatRow = null;
+            }
+          }, { passive: false });
+
+          const handleCatTouchEnd = () => {
+            if (touchDraggedCatIdx === null) return;
+
+            const targetRow = currentTouchTargetCatRow;
+            listEl.querySelectorAll('.cat-manager-row').forEach(r => r.classList.remove('cat-drag-over', 'cat-dragging'));
+
+            if (targetRow) {
+              const toIndex = Number(targetRow.dataset.index);
+              if (!isNaN(toIndex) && toIndex !== touchDraggedCatIdx) {
+                const [movedCat] = state.categories.splice(touchDraggedCatIdx, 1);
+                state.categories.splice(toIndex, 0, movedCat);
+                saveState();
+                renderCategoryManagerList();
+                updateCategoryDropdowns();
+                renderTable();
+              }
+            }
+
+            touchDraggedCatIdx = null;
+            currentTouchTargetCatRow = null;
+          };
+
+          listEl.addEventListener('touchend', handleCatTouchEnd);
+          listEl.addEventListener('touchcancel', handleCatTouchEnd);
+        }
+
+        listEl.querySelectorAll('[data-action="cat-edit"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const oldCatName = btn.dataset.cat;
+            const newCatName = prompt('کیٹیگری کا نیا نام درج کریں:', oldCatName);
+            if (!newCatName || !newCatName.trim()) return;
+            const cleanNewName = newCatName.trim();
+            if (cleanNewName === oldCatName) return;
+
+            if (state.categories.includes(cleanNewName)) {
+              alert('اس نام سے کیٹیگری پہلے سے موجود ہے۔');
+              return;
+            }
+
+            const idx = state.categories.indexOf(oldCatName);
+            if (idx > -1) {
+              state.categories[idx] = cleanNewName;
+            }
+
+            state.items.forEach(item => {
+              if (item.category === oldCatName) {
+                item.category = cleanNewName;
+              }
+            });
+
+            saveState();
+            renderCategoryManagerList();
+            updateCategoryDropdowns();
+            renderTable();
+          });
+        });
+
+        listEl.querySelectorAll('[data-action="cat-del"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const toDel = btn.dataset.cat;
+            if (confirm(`کیا آپ واقعی '${toDel}' کیٹیگری ختم کرنا چاہتے ہیں؟ اس کیٹیگری کے آئٹمز ضائع نہیں ہوں گے بلکہ خودکار طور پر 'عام' میں منتقل ہو جائیں گے۔`)) {
+              state.categories = state.categories.filter(c => c !== toDel);
+              state.items.forEach(i => {
+                if (i.category === toDel) i.category = '';
+              });
+              saveState();
+              renderCategoryManagerList();
+              updateCategoryDropdowns();
+              renderTable();
+            }
+          });
+        });
+      };
+
+      const MAX_PRICE_HISTORY_ITEMS = 15;
+
+      const logRateChange = (item, newRate) => {
+        const parsedNew = parseFloat(newRate) || 0;
+        if (parsedNew <= 0) return;
+        if (!Array.isArray(item.priceHistory)) item.priceHistory = [];
+
+        // اگر آخری ریکارڈ میں یہی ریٹ درج ہے تو دوبارہ لاگ نہ کریں
+        if (item.priceHistory.length > 0 && item.priceHistory[0].rate === parsedNew) {
+          return;
+        }
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('ur-PK', { year: 'numeric', month: 'short', day: 'numeric' });
+        const basisUnit = getRateBasisLabel(item.qtyUnit);
+
+        // اگر اسی تاریخ کی اینٹری پہلے سے موجود ہے تو اسی کو اپڈیٹ کریں
+        if (item.priceHistory.length > 0 && item.priceHistory[0].date === dateStr) {
+          item.priceHistory[0].rate = parsedNew;
+          item.priceHistory[0].unit = basisUnit;
+          item.priceHistory[0].iso = now.toISOString();
+        } else {
+          item.priceHistory.unshift({
+            rate: parsedNew,
+            unit: basisUnit,
+            date: dateStr,
+            iso: now.toISOString()
+          });
+        }
+
+        // زیادہ سے زیادہ 15 اینٹریز کی محفوظ حد
+        while (item.priceHistory.length > MAX_PRICE_HISTORY_ITEMS) {
+          item.priceHistory.pop();
+        }
+      };
+
+      // -------------------------------------------------------------
+      // ایکٹیویٹی لاگ / آڈٹ ٹریل (Activity & Audit Log Manager)
+      // -------------------------------------------------------------
+      const logActivity = (type, title, detail = '') => {
+        if (!Array.isArray(state.activityLog)) state.activityLog = [];
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('ur-PK', { year: 'numeric', month: 'short', day: 'numeric' });
+        const timeStr = now.toLocaleTimeString('ur-PK', { hour: '2-digit', minute: '2-digit' });
+
+        state.activityLog.unshift({
+          type,   // 'add', 'del', 'edit', 'clone'
+          title,
+          detail,
+          date: dateStr,
+          time: timeStr,
+          iso: now.toISOString()
+        });
+
+        while (state.activityLog.length > MAX_ACTIVITY_LOGS) {
+          state.activityLog.pop();
+        }
+        saveState();
+      };
+
+      const showActivityLogModal = () => {
+        const modal = document.getElementById('activityLogModal');
+        const timeline = document.getElementById('activityLogTimeline');
+        const emptyMsg = document.getElementById('noActivityLogMessage');
+        const actionsWrap = document.getElementById('activityLogActionsWrap');
+        timeline.innerHTML = '';
+
+        if (!state.activityLog || state.activityLog.length === 0) {
+          emptyMsg.style.display = 'block';
+          if (actionsWrap) actionsWrap.style.display = 'none';
+        } else {
+          emptyMsg.style.display = 'none';
+          if (actionsWrap) actionsWrap.style.display = 'flex';
+
+          const badgeConfig = {
+            add: { text: 'اضافہ', class: 'badge-add' },
+            del: { text: 'حذف', class: 'badge-del' },
+            edit: { text: 'ترمیم', class: 'badge-edit' },
+            clone: { text: 'کاپی', class: 'badge-clone' }
+          };
+
+          state.activityLog.forEach(log => {
+            const li = document.createElement('li');
+            li.className = 'activity-log-item';
+            const badge = badgeConfig[log.type] || { text: 'سرگرمی', class: 'badge-edit' };
+
+            li.innerHTML = `
+              <span class="activity-badge ${badge.class}">${badge.text}</span>
+              <div class="activity-info">
+                <div class="activity-title">${escapeHTML(log.title)}</div>
+                ${log.detail ? `<div class="activity-detail">${escapeHTML(log.detail)}</div>` : ''}
+              </div>
+              <div class="activity-time">${escapeHTML(log.date)}<br>${escapeHTML(log.time)}</div>
+            `;
+            timeline.appendChild(li);
+          });
+        }
+        modal.showModal();
+      };
+
+      // -------------------------------------------------------------
+      // تھیم مینیجر (Dark & Light Mode Manager)
+      // -------------------------------------------------------------
+      const updateThemeToggleIcon = theme => {
+        const toggleBtn = document.getElementById('btnThemeToggle');
+        if (!toggleBtn) return;
+        const isDark = theme === 'dark';
+        const sun = toggleBtn.querySelector('.sun-icon');
+        const moon = toggleBtn.querySelector('.moon-icon');
+        if (sun) sun.style.display = isDark ? 'block' : 'none';
+        if (moon) moon.style.display = isDark ? 'none' : 'block';
+        toggleBtn.setAttribute('title', isDark ? 'لائٹ موڈ آن کریں' : 'ڈارک موڈ آن کریں');
+      };
+
+      const initTheme = () => {
+        const savedTheme = localStorage.getItem('GROCERY_THEME') ||
+          (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeToggleIcon(savedTheme);
+
+        const toggleBtn = document.getElementById('btnThemeToggle');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            const nextTheme = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('GROCERY_THEME', nextTheme);
+            updateThemeToggleIcon(nextTheme);
+          });
+        }
+      };
+
+      // -------------------------------------------------------------
+      // TEMPLATES MANAGER
+      // -------------------------------------------------------------
+      const updateActiveTemplateUI = () => {
+        const badge = document.getElementById('activeTemplateBadge');
+        const text = document.getElementById('activeTemplateNameText');
+        if (activeTemplateName) {
+          text.textContent = activeTemplateName;
+          badge.classList.add('show');
+        } else {
+          badge.classList.remove('show');
+        }
+      };
+
+      const renderTemplatesList = () => {
+        const box = document.getElementById('templateListBox');
+        if (!box) return;
+        box.innerHTML = '';
+
+        if (templates.length === 0) {
+          box.innerHTML = '<p style="font-size:0.8rem; color:var(--text-subtle); text-align:center; padding:1.5rem 0;">کوئی ٹیمپلیٹ محفوظ نہیں ہے۔ اوپر نام لکھ کر نیا ٹیمپلیٹ محفوظ کریں۔</p>';
+          return;
+        }
+
+        templates.forEach((tmpl, idx) => {
+          const div = document.createElement('div');
+          div.className = 'template-item-row';
+          const itemsCount = Object.keys(tmpl.selected || {}).filter(k => tmpl.selected[k]).length;
+          
+          div.innerHTML = `
+            <div class="template-item-info">
+              <h4>${escapeHTML(tmpl.name)}</h4>
+              <span>${itemsCount} اشیاء منتخب — ${tmpl.date || ''}</span>
+            </div>
+            <div class="template-item-actions">
+              <button type="button" class="btn-action btn-secondary" data-load-tmpl="${idx}" style="padding:0.35rem 0.65rem; font-size:0.78rem;">کھولیں (Load)</button>
+              <button type="button" class="btn-action btn-secondary" data-update-tmpl="${idx}" title="موجودہ تبدیلیاں اس ٹیمپلیٹ پر محفوظ کریں" style="padding:0.35rem 0.65rem; font-size:0.78rem; color:var(--primary);">اپ ڈیٹ</button>
+              <button type="button" class="row-btn btn-del" data-del-tmpl="${idx}" title="ٹیمپلیٹ ختم کریں" style="width:28px; height:28px;">✕</button>
+            </div>
+          `;
+          box.appendChild(div);
+        });
+
+        box.querySelectorAll('[data-load-tmpl]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.dataset.loadTmpl);
+            const tmpl = templates[idx];
+            if (!tmpl) return;
+
+            if (confirm(`کیا آپ '${tmpl.name}' ٹیمپلیٹ لوڈ کرنا چاہتے ہیں؟ موجودہ سلیکشن اس کے مطابق بدل جائے گی۔`)) {
+              state.selected = JSON.parse(JSON.stringify(tmpl.selected || {}));
+              activeTemplateName = tmpl.name;
+              updateActiveTemplateUI();
+              saveState();
+              renderTable();
+              document.getElementById('templateModal').close();
+            }
+          });
+        });
+
+        box.querySelectorAll('[data-update-tmpl]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.dataset.updateTmpl);
+            const tmpl = templates[idx];
+            if (!tmpl) return;
+
+            if (confirm(`کیا آپ موجودہ منتخب اشیاء کو '${tmpl.name}' ٹیمپلیٹ پر اوور رائٹ / اپ ڈیٹ کرنا چاہتے ہیں؟`)) {
+              tmpl.selected = JSON.parse(JSON.stringify(state.selected || {}));
+              tmpl.date = new Date().toLocaleDateString('ur-PK', { year: 'numeric', month: 'short', day: 'numeric' });
+              activeTemplateName = tmpl.name;
+              updateActiveTemplateUI();
+              saveTemplates();
+              renderTemplatesList();
+              alert(`'${tmpl.name}' کو موجودہ اشیاء کے ساتھ اپ ڈیٹ کر دیا گیا ہے۔`);
+            }
+          });
+        });
+
+        box.querySelectorAll('[data-del-tmpl]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.dataset.delTmpl);
+            const tmpl = templates[idx];
+            if (!tmpl) return;
+
+            if (confirm(`کیا آپ واقعی '${tmpl.name}' ٹیمپلیٹ ڈیلیٹ کرنا چاہتے ہیں؟`)) {
+              if (activeTemplateName === tmpl.name) {
+                activeTemplateName = null;
+                updateActiveTemplateUI();
+              }
+              templates.splice(idx, 1);
+              saveTemplates();
+              renderTemplatesList();
+            }
+          });
+        });
+      };
+
+      // -------------------------------------------------------------
+      // WEB SCREEN RENDERING (انٹرایکٹو اسکرین ٹیبل)
+      // -------------------------------------------------------------
+      const renderTable = () => {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        const query = searchQuery.toLowerCase();
+
+        const filteredItems = state.items.filter(item => {
+          const isSelected = !!state.selected[item.id];
+          const matchesSearch = !query || 
+            item.name.toLowerCase().includes(query) || 
+            (item.company && item.company.toLowerCase().includes(query));
+          const matchesFilter = filterMode === 'all' ||
+            (filterMode === 'selected' && isSelected) ||
+            (filterMode === 'unselected' && !isSelected);
+          
+          let matchesCategory = true;
+          if (selectedCategory === 'uncategorized') {
+            matchesCategory = !item.category;
+          } else if (selectedCategory !== 'all') {
+            matchesCategory = item.category === selectedCategory;
+          }
+
+          return matchesSearch && matchesFilter && matchesCategory;
+        });
+
+        const groups = {};
+        state.categories.forEach(cat => { groups[cat] = []; });
+        groups[''] = [];
+
+        filteredItems.forEach(item => {
+          const cat = item.category || '';
+          if (!groups[cat]) groups[cat] = [];
+          groups[cat].push(item);
+        });
+
+        let globalIndex = 1;
+
+        Object.keys(groups).forEach(catName => {
+          const itemsInCat = groups[catName];
+          if (itemsInCat.length === 0) return;
+
+          let subtotal = 0;
+          let catSelectedCount = 0;
+          itemsInCat.forEach(it => {
+            if (state.selected[it.id]) {
+              catSelectedCount++;
+              subtotal += calculateItemAmount(it);
+            }
+          });
+
+          const headerTr = document.createElement('tr');
+          headerTr.className = 'category-header-row';
+          const displayTitle = catName || 'عام اشیاء (بغیر کیٹیگری)';
+          headerTr.innerHTML = `
+            <td colspan="8" class="category-header-cell">
+              <div class="category-header-content">
+                <span class="category-title">
+                  ${escapeHTML(displayTitle)}
+                  <span class="category-badge">${catSelectedCount} منتخب / ${itemsInCat.length} کل</span>
+                </span>
+                <span class="category-subtotal">
+                  ذیلی رقم: <span class="category-subtotal-val">${formatNumber(subtotal)}</span>
+                </span>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(headerTr);
+
+          itemsInCat.forEach(item => {
+            const isSelected = !!state.selected[item.id];
+            const isRowEditing = (currentlyEditingId === item.id) || isBulkEditMode;
+            const amount = calculateItemAmount(item);
+            const displayRate = getDisplayRate(item);
+
+            const tr = document.createElement('tr');
+            tr.className = `${isSelected ? 'is-selected' : ''} ${isRowEditing ? 'is-editing' : ''}`;
+            tr.dataset.id = item.id;
+            tr.draggable = !isRowEditing;
+
+            if (isRowEditing) {
+              tr.innerHTML = `
+                <td class="drag-cell" title="ترتیب بدلیں">—</td>
+                <td class="check-cell">
+                  <div class="custom-check" data-action="toggle" data-id="${item.id}" role="checkbox" aria-checked="${isSelected}">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </td>
+                <td data-label="#"><span class="num-field" style="font-size:0.75rem; color:var(--text-subtle);">${globalIndex}</span></td>
+                <td data-label="نام کی تفصیل (نام، کمپنی اور سائز)" class="col-name">
+                  <div class="identity-edit-fields">
+                    <input type="text" class="table-input text-field in-bulk-name" data-id="${item.id}" value="${escapeHTML(item.name)}" placeholder="نام آئٹم">
+                    <div class="identity-edit-secondary">
+                      <input type="text" class="table-input text-field in-bulk-co" data-id="${item.id}" value="${escapeHTML(item.company)}" placeholder="کمپنی / برانڈ">
+                      <div class="identity-edit-size">
+                        <input type="number" class="table-input num-field in-bulk-sv" data-id="${item.id}" value="${item.sizeVal || ''}" min="0" step="any" placeholder="سائز">
+                        <select class="unit-selector in-bulk-su" data-id="${item.id}">${getUnitOptionsHTML(item.sizeUnit, true)}</select>
+                      </div>
+                    </div>
+                    <select class="category-row-select in-bulk-cat" data-id="${item.id}" aria-label="کیٹیگری">
+                      ${getCategoryOptionsHTML(item.category)}
+                    </select>
+                  </div>
+                </td>
+                <td data-label="مقدار" class="col-qty">
+                  <div class="qty-cell-inner" style="flex-wrap:wrap;">
+                    <input type="number" class="table-input num-field in-qty" data-id="${item.id}" value="${item.qty || ''}" min="0.01" step="any" placeholder="0">
+                    <button type="button" class="qty-unit-trigger qty-unit-label" data-action="choose-qty-unit" data-id="${item.id}" title="اکائی بدلنے کے لیے کلک کریں">${escapeHTML(item.qtyUnit)}</button>
+                    <select class="unit-selector in-bulk-qt" data-id="${item.id}">
+                      <option value="weight" ${item.qtyType === 'weight' ? 'selected' : ''}>وزن</option>
+                      <option value="volume" ${item.qtyType === 'volume' ? 'selected' : ''}>حجم</option>
+                      <option value="count" ${item.qtyType === 'count' ? 'selected' : ''}>عدد</option>
+                    </select>
+                  </div>
+                </td>
+                <td data-label="ریٹ" class="col-rate">
+                  <div class="rate-cell-wrap">
+                    <input type="number" class="table-input num-field in-rate" data-id="${item.id}" value="${item.rate || ''}" min="0" step="1" placeholder="0" style="width:80px;" title="${escapeHTML(getRateBasisLabel(item.qtyUnit))} ریٹ درج کریں">
+                    <button type="button" class="row-btn btn-log" data-action="view-history" data-id="${item.id}" title="ہسٹری" style="width:24px; height:24px;">
+                      <svg viewBox="0 0 24 24" style="width:12px; height:12px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </button>
+                  </div>
+                </td>
+                <td data-label="رقم" class="col-amt">
+                  <span class="amount-display">${amount > 0 ? formatNumber(amount) : '—'}</span>
+                </td>
+                <td class="action-cell">
+                  <div class="action-flex">
+                    ${isBulkEditMode ? `
+                      <button type="button" class="row-btn btn-del" data-action="delete" data-id="${item.id}" title="آئٹم حذف کریں">
+                        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                      </button>
+                    ` : `
+                      <button type="button" class="row-btn btn-save" data-action="save-single-edit" data-id="${item.id}" title="محفوظ کریں">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                      </button>
+                      <button type="button" class="row-btn btn-copy" data-action="clone-item" data-id="${item.id}" title="کاپی بنائیں (Duplicate)">
+                        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      </button>
+                      <button type="button" class="row-btn btn-del" data-action="delete" data-id="${item.id}" title="حذف کریں">
+                        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                      </button>
+                      <button type="button" class="row-btn" data-action="cancel-single-edit" data-id="${item.id}" title="منسوخ">
+                        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      </button>
+                    `}
+                  </div>
+                </td>
+              `;
+            } else {
+              const sizeText = item.sizeVal ? `${item.sizeVal} ${item.sizeUnit || ''}` : '';
+              const identityParts = [item.name, item.company, sizeText].filter(Boolean);
+              tr.innerHTML = `
+                <td class="drag-cell" title="ترتیب بدلیں">⠿</td>
+                <td class="check-cell">
+                  <div class="custom-check" data-action="toggle" data-id="${item.id}" role="checkbox" aria-checked="${isSelected}">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </td>
+                <td data-label="#"><span class="num-field" style="font-size:0.75rem; color:var(--text-subtle);">${globalIndex}</span></td>
+                <td data-label="نام کی تفصیل (نام، کمپنی اور سائز)" class="col-name">
+                  <div class="item-identity" dir="auto">
+                    ${identityParts.map((part, index) => `${index ? '<span class="item-identity-separator" aria-hidden="true">–</span>' : ''}<span class="${index ? 'item-identity-detail' : 'item-identity-name'}">${escapeHTML(part)}</span>`).join('')}
+                  </div>
+                </td>
+                <td data-label="مقدار" class="col-qty">
+                  <div class="qty-cell-inner">
+                    <input type="number" class="table-input num-field in-qty" data-id="${item.id}" value="${item.qty || ''}" min="0.01" step="any" placeholder="0">
+                    <button type="button" class="qty-unit-trigger qty-unit-label" data-action="choose-qty-unit" data-id="${item.id}" title="اکائی بدلنے کے لیے کلک کریں">${escapeHTML(item.qtyUnit || 'کلوگرام')}</button>
+                  </div>
+                </td>
+                <td data-label="ریٹ" class="col-rate">
+                  <div class="rate-cell-inner">
+                    <span class="rate-text-val">${displayRate > 0 ? formatNumber(displayRate) : '—'}</span>
+                    <button type="button" class="row-btn btn-log" data-action="view-history" data-id="${item.id}" title="ہسٹری" style="width:24px; height:24px;">
+                      <svg viewBox="0 0 24 24" style="width:12px; height:12px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </button>
+                  </div>
+                </td>
+                <td data-label="رقم" class="col-amt">
+                  <span class="amount-display">${amount > 0 ? formatNumber(amount) : '—'}</span>
+                </td>
+                <td class="action-cell">
+                  <div class="action-flex">
+                    <button type="button" class="row-btn" data-action="start-single-edit" data-id="${item.id}" title="ایڈٹ کریں / کیٹیگری بدلیں / کاپی بنائیں">
+                      <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </button>
+                  </div>
+                </td>
+              `;
+            }
+            tbody.appendChild(tr);
+            globalIndex++;
+          });
+        });
+
+        tbody.querySelectorAll('.table-input.num-field').forEach(input => autoResizeInput(input));
+        updateCalculations();
+      };
+
+      const updateCalculations = () => {
+        let selectedTotal = 0;
+        let selectedCount = 0;
+
+        state.items.forEach(item => {
+          if (state.selected[item.id]) {
+            selectedCount++;
+            selectedTotal += calculateItemAmount(item);
+          }
+        });
+
+        document.getElementById('dispTotal').textContent = formatNumber(selectedTotal);
+        document.getElementById('dispCount').textContent = selectedCount;
+        const remaining = (Number(state.budget) || 0) - selectedTotal;
+        document.getElementById('dispRemain').textContent = formatNumber(remaining);
+        document.getElementById('remainingCard').classList.toggle('metric-over', remaining < 0);
+        document.getElementById('remainingCard').classList.toggle('metric-ok', remaining >= 0);
+        document.getElementById('checkoutTotalVal').textContent = formatNumber(selectedTotal);
+
+      };
+
+      // -------------------------------------------------------------
+      // DEDICATED STATIC PRINT GENERATOR
+      // -------------------------------------------------------------
+      const buildDedicatedPrintDOM = (printType) => {
+        const isBlank = (printType === 'blank');
+        
+        const now = new Date();
+        document.getElementById('pDate').textContent = now.toLocaleDateString('ur-PK', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        const selectedItems = state.items.filter(it => !!state.selected[it.id]);
+        document.getElementById('pCount').textContent = selectedItems.length;
+        document.getElementById('pModeTitle').textContent = isBlank ? 'شاپ کیپر لسٹ (خالی ریٹ)' : 'مکمل لاگت لسٹ';
+
+        const currentTmplName = activeTemplateName ? activeTemplateName : 'حسبِ ضرورت فہرست';
+        document.getElementById('pTemplateName').textContent = currentTmplName;
+        document.body.setAttribute('data-template-print', currentTmplName);
+
+        const pTbody = document.getElementById('pTableBody');
+        pTbody.innerHTML = '';
+
+        const groups = {};
+        state.categories.forEach(cat => { groups[cat] = []; });
+        groups[''] = [];
+
+        selectedItems.forEach(item => {
+          const cat = item.category || '';
+          if (!groups[cat]) groups[cat] = [];
+          groups[cat].push(item);
+        });
+
+        let printIndex = 1;
+        let grandTotal = 0;
+
+        Object.keys(groups).forEach(catName => {
+          const itemsInCat = groups[catName];
+          if (itemsInCat.length === 0) return;
+
+          let subtotal = 0;
+          itemsInCat.forEach(it => {
+            const amt = calculateItemAmount(it);
+            subtotal += amt;
+            grandTotal += amt;
+          });
+
+          const catTr = document.createElement('tr');
+          catTr.className = 'p-cat-row';
+          const title = catName || 'عام اشیاء (بغیر کیٹیگری)';
+          catTr.innerHTML = `
+            <td colspan="5">
+              <div class="p-cat-flex">
+                <span><strong>${escapeHTML(title)}</strong> (منتخب اشیاء: ${itemsInCat.length})</span>
+                ${!isBlank ? `<span class="num-font" style="font-size:8.5pt;">ذیلی رقم: ${formatNumber(subtotal)}</span>` : ''}
+              </div>
+            </td>
+          `;
+          pTbody.appendChild(catTr);
+
+          itemsInCat.forEach(item => {
+            const tr = document.createElement('tr');
+            const sizeDisplay = item.sizeVal ? `${item.sizeVal} ${item.sizeUnit || ''}` : '';
+            const identityDisplay = [item.name, item.company, sizeDisplay].filter(Boolean)
+              .map(part => escapeHTML(part))
+              .join(' <span class="p-identity-separator" aria-hidden="true">–</span> ');
+            const qtyDisplay = `${item.qty} ${item.qtyUnit || 'کلوگرام'}`;
+            const amt = calculateItemAmount(item);
+            const displayRate = getDisplayRate(item);
+
+            tr.innerHTML = `
+              <td class="t-center num-font">${printIndex}</td>
+              <td class="t-start p-item-name">${identityDisplay}</td>
+              <td class="t-center num-font">${escapeHTML(qtyDisplay)}</td>
+              <td class="t-center num-font">
+                ${isBlank ? '<span class="p-blank-box"></span>' : (displayRate > 0 ? formatNumber(displayRate) : '—')}
+              </td>
+              <td class="t-center num-font">
+                ${isBlank ? '<span class="p-blank-box"></span>' : (amt > 0 ? formatNumber(amt) : '—')}
+              </td>
+            `;
+            pTbody.appendChild(tr);
+            printIndex++;
+          });
+        });
+
+        const summaryTotalWrap = document.getElementById('pSummaryTotalWrap');
+        if (isBlank) {
+          summaryTotalWrap.style.visibility = 'hidden';
+        } else {
+          summaryTotalWrap.style.visibility = 'visible';
+          document.getElementById('pSummaryTotalVal').textContent = formatNumber(grandTotal);
+        }
+      };
+
+      const attachTableDelegations = () => {
+        const tbody = document.getElementById('tableBody');
+
+        tbody.addEventListener('input', e => {
+          const target = e.target;
+          const id = Number(target.dataset.id);
+          if (!id) return;
+          const item = state.items.find(i => i.id === id);
+          if (!item) return;
+
+          if (target.classList.contains('num-field')) {
+            autoResizeInput(target);
+          }
+
+          if (target.classList.contains('in-rate')) {
+            const val = parseFloat(target.value) || 0;
+            item.rate = val;
+            saveState();
+            const row = target.closest('tr');
+            const amt = calculateItemAmount(item);
+            row.querySelector('.amount-display').textContent = amt > 0 ? formatNumber(amt) : '—';
+            updateCalculations();
+          } else if (target.classList.contains('in-qty')) {
+            item.qty = parseFloat(target.value) || 0;
+            saveState();
+            const row = target.closest('tr');
+            const amt = calculateItemAmount(item);
+            row.querySelector('.amount-display').textContent = amt > 0 ? formatNumber(amt) : '—';
+            updateCalculations();
+          } else if (target.classList.contains('in-bulk-name')) {
+            item.name = target.value;
+            saveState();
+          } else if (target.classList.contains('in-bulk-co')) {
+            item.company = target.value;
+            saveState();
+          } else if (target.classList.contains('in-bulk-sv')) {
+            item.sizeVal = target.value;
+            saveState();
+          }
+        });
+
+        tbody.addEventListener('change', e => {
+          const target = e.target;
+          const id = Number(target.dataset.id);
+          if (!id) return;
+          const item = state.items.find(i => i.id === id);
+          if (!item) return;
+
+          if (target.classList.contains('in-bulk-cat')) {
+            item.category = target.value;
+            saveState();
+            renderTable();
+          } else if (target.classList.contains('in-bulk-su')) {
+            const converted = convertMeasurement(item.sizeVal, item.sizeUnit, target.value);
+            item.sizeUnit = target.value;
+            if (target.value && item.sizeVal !== '') {
+              const normalized = normalizeMeasurement(converted, item.sizeUnit);
+              item.sizeVal = normalized.value;
+              item.sizeUnit = normalized.unit;
+            }
+            saveState();
+            renderTable();
+          } else if (target.classList.contains('in-bulk-qt')) {
+            const baseAmount = (Number(item.qty) || 0) * (UNIT_INFO[item.qtyUnit]?.baseFactor || 1);
+            item.qtyType = target.value;
+            const normalized = getQuantityUnit(baseAmount, item.qtyType);
+            item.qty = normalized.value;
+            item.qtyUnit = normalized.unit;
+            const row = target.closest('tr');
+            const unitLabel = row.querySelector('.qty-unit-label');
+            if (unitLabel) unitLabel.textContent = item.qtyUnit;
+            saveState();
+            renderTable();
+          } else if (target.classList.contains('in-qty')) {
+            item.qty = roundMeasurement(parseFloat(target.value) || 0);
+            target.value = item.qty || '';
+            const row = target.closest('tr');
+            const typeSelector = row.querySelector('.in-bulk-qt');
+            const unitLabel = row.querySelector('.qty-unit-label');
+            if (typeSelector) typeSelector.value = item.qtyType;
+            if (unitLabel) unitLabel.textContent = item.qtyUnit;
+            const amountDisplay = row.querySelector('.amount-display');
+            const amount = calculateItemAmount(item);
+            if (amountDisplay) amountDisplay.textContent = amount > 0 ? formatNumber(amount) : '—';
+            autoResizeInput(target);
+            saveState();
+            updateCalculations();
+          } else if (target.classList.contains('in-bulk-sv')) {
+            item.sizeVal = target.value;
+            if (item.sizeUnit && item.sizeVal !== '') {
+              const normalized = normalizeMeasurement(item.sizeVal, item.sizeUnit);
+              item.sizeVal = normalized.value;
+              item.sizeUnit = normalized.unit;
+            }
+            target.value = item.sizeVal;
+            const unitSelector = target.parentElement.querySelector('.in-bulk-su');
+            if (unitSelector) unitSelector.value = item.sizeUnit;
+            autoResizeInput(target);
+            saveState();
+          } else if (target.classList.contains('in-rate')) {
+            const val = parseFloat(target.value) || 0;
+            item.rate = val;
+            logRateChange(item, val);
+            saveState();
+            const row = target.closest('tr');
+            const amt = calculateItemAmount(item);
+            const amountDisplay = row.querySelector('.amount-display');
+            if (amountDisplay) amountDisplay.textContent = amt > 0 ? formatNumber(amt) : '—';
+            autoResizeInput(target);
+            updateCalculations();
+          }
+        });
+
+        tbody.addEventListener('click', e => {
+          const btn = e.target.closest('[data-action]');
+          if (!btn) return;
+          const action = btn.dataset.action;
+          const id = Number(btn.dataset.id);
+          const row = btn.closest('tr');
+
+          if (action === 'choose-qty-unit') {
+            const item = state.items.find(i => i.id === id);
+            if (!item) return;
+            qtyUnitTargetId = id;
+            const unitDialog = document.getElementById('qtyUnitModal');
+            const unitChoice = document.getElementById('qtyUnitChoice');
+            const unitDescription = document.getElementById('qtyUnitModalDescription');
+            unitChoice.innerHTML = getQuantityUnitOptionsHTML(item.qtyType, item.qtyUnit);
+            unitDescription.textContent = `موجودہ مقدار ${formatNumber(item.qty)} ${item.qtyUnit} ہے۔ اکائی بدلنے پر یہی حقیقی مقدار برقرار رہے گی۔`;
+            unitDialog.showModal();
+          } else if (action === 'toggle') {
+            state.selected[id] = !state.selected[id];
+            saveState();
+            row.classList.toggle('is-selected', !!state.selected[id]);
+            btn.setAttribute('aria-checked', !!state.selected[id]);
+            renderTable();
+          } else if (action === 'start-single-edit') {
+            currentlyEditingId = id;
+            renderTable();
+          } else if (action === 'cancel-single-edit') {
+            currentlyEditingId = null;
+            renderTable();
+          } else if (action === 'save-single-edit') {
+            const item = state.items.find(i => i.id === id);
+            currentlyEditingId = null;
+            if (item) logActivity('edit', 'آئٹم میں ترمیم کی گئی', `${item.name}`);
+            saveState();
+            renderTable();
+          } else if (action === 'clone-item') {
+            const sourceItem = state.items.find(i => i.id === id);
+            if (!sourceItem) return;
+
+            const nextId = state.nextItemId;
+            state.nextItemId = nextId + 1;
+            const clonedItem = {
+              id: nextId,
+              name: sourceItem.name,
+              category: sourceItem.category || '',
+              company: sourceItem.company || '',
+              sizeVal: sourceItem.sizeVal || '',
+              sizeUnit: sourceItem.sizeUnit || '',
+              qty: sourceItem.qty || 1,
+              qtyUnit: sourceItem.qtyUnit || 'کلوگرام',
+              qtyType: sourceItem.qtyType || getQuantityType(sourceItem.qtyUnit || 'کلوگرام'),
+              rate: sourceItem.rate || 0,
+              priceHistory: sourceItem.priceHistory ? [...sourceItem.priceHistory] : []
+            };
+
+            const sourceIndex = state.items.findIndex(i => i.id === id);
+            if (sourceIndex > -1) {
+              state.items.splice(sourceIndex + 1, 0, clonedItem);
+            } else {
+              state.items.push(clonedItem);
+            }
+
+            state.selected[clonedItem.id] = true;
+            currentlyEditingId = clonedItem.id;
+            logActivity('clone', 'آئٹم کی کاپی بنائی گئی', `${clonedItem.name}`);
+            saveState();
+            renderTable();
+          } else if (action === 'delete') {
+            const targetItem = state.items.find(i => i.id === id);
+            const targetName = targetItem ? targetItem.name : '';
+            if (confirm('کیا آپ واقعی یہ آئٹم فہرست سے ہٹانا چاہتے ہیں؟')) {
+              state.items = state.items.filter(i => i.id !== id);
+              delete state.selected[id];
+              if (currentlyEditingId === id) currentlyEditingId = null;
+              if (targetName) logActivity('del', 'آئٹم حذف کیا گیا', `${targetName}`);
+              saveState();
+              renderTable();
+            }
+          } else if (action === 'view-history') {
+            const item = state.items.find(i => i.id === id);
+            if (!item) return;
+            showPriceHistoryModal(item);
+          }
+        });
+
+        // -----------------------------------------------------------------
+        // DRAG AND DROP REPAIR (کیٹیگری ہیڈرز کو بائی پاس کرتے ہوئے)
+        // -----------------------------------------------------------------
+        tbody.addEventListener('dragstart', e => {
+          const row = e.target.closest('tr');
+          if (!row || row.classList.contains('category-header-row') || currentlyEditingId !== null || isBulkEditMode) {
+            e.preventDefault();
+            return;
+          }
+          draggedItemId = Number(row.dataset.id);
+          row.classList.add('is-dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', draggedItemId);
+        });
+
+        tbody.addEventListener('dragend', e => {
+          const row = e.target.closest('tr');
+          if (row) row.classList.remove('is-dragging');
+          tbody.querySelectorAll('tr').forEach(r => r.classList.remove('drag-over', 'is-dragging'));
+          draggedItemId = null;
+        });
+
+        tbody.addEventListener('dragover', e => {
+          e.preventDefault();
+          const targetRow = e.target.closest('tr');
+          if (!targetRow || targetRow.classList.contains('category-header-row') || !draggedItemId) return;
+          
+          tbody.querySelectorAll('tr').forEach(r => r.classList.remove('drag-over'));
+          targetRow.classList.add('drag-over');
+          e.dataTransfer.dropEffect = 'move';
+        });
+
+        tbody.addEventListener('drop', e => {
+          e.preventDefault();
+          const targetRow = e.target.closest('tr');
+          tbody.querySelectorAll('tr').forEach(r => r.classList.remove('drag-over', 'is-dragging'));
+
+          if (!targetRow || targetRow.classList.contains('category-header-row') || !draggedItemId) return;
+
+          const targetId = Number(targetRow.dataset.id);
+          if (!targetId || draggedItemId === targetId) return;
+
+          const fromIdx = state.items.findIndex(i => i.id === draggedItemId);
+          const toIdx = state.items.findIndex(i => i.id === targetId);
+
+          if (fromIdx > -1 && toIdx > -1) {
+            const [movedItem] = state.items.splice(fromIdx, 1);
+            const targetItem = state.items[toIdx > fromIdx ? toIdx - 1 : toIdx];
+            if (targetItem) {
+              movedItem.category = targetItem.category || '';
+            }
+            state.items.splice(toIdx, 0, movedItem);
+            saveState();
+            renderTable();
+          }
+          draggedItemId = null;
+        });
+
+        // -----------------------------------------------------------------
+        // MOBILE TOUCH DRAG & DROP FOR TABLE ITEMS
+        // -----------------------------------------------------------------
+        let touchDraggedItemId = null;
+        let currentTouchTargetRow = null;
+
+        tbody.addEventListener('touchstart', e => {
+          const handle = e.target.closest('.drag-cell');
+          if (!handle) return;
+          const row = handle.closest('tr');
+          if (!row || row.classList.contains('category-header-row') || currentlyEditingId !== null || isBulkEditMode) return;
+
+          touchDraggedItemId = Number(row.dataset.id);
+          if (!touchDraggedItemId) return;
+
+          row.classList.add('is-dragging');
+          if (navigator.vibrate) navigator.vibrate(30);
+        }, { passive: true });
+
+        tbody.addEventListener('touchmove', e => {
+          if (!touchDraggedItemId) return;
+
+          const touch = e.touches[0];
+          const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+          const targetRow = elem ? elem.closest('tr') : null;
+
+          tbody.querySelectorAll('tr.drag-over').forEach(r => r.classList.remove('drag-over'));
+
+          if (targetRow && targetRow.parentElement === tbody && !targetRow.classList.contains('category-header-row')) {
+            targetRow.classList.add('drag-over');
+            currentTouchTargetRow = targetRow;
+            if (e.cancelable) e.preventDefault();
+          } else {
+            currentTouchTargetRow = null;
+          }
+        }, { passive: false });
+
+        const handleTableTouchEnd = () => {
+          if (!touchDraggedItemId) return;
+
+          const targetRow = currentTouchTargetRow;
+          tbody.querySelectorAll('tr').forEach(r => r.classList.remove('drag-over', 'is-dragging'));
+
+          if (targetRow && !targetRow.classList.contains('category-header-row')) {
+            const targetId = Number(targetRow.dataset.id);
+            if (targetId && targetId !== touchDraggedItemId) {
+              const fromIdx = state.items.findIndex(i => i.id === touchDraggedItemId);
+              const toIdx = state.items.findIndex(i => i.id === targetId);
+
+              if (fromIdx > -1 && toIdx > -1) {
+                const [movedItem] = state.items.splice(fromIdx, 1);
+                const targetItem = state.items[toIdx > fromIdx ? toIdx - 1 : toIdx];
+                if (targetItem) {
+                  movedItem.category = targetItem.category || '';
+                }
+                state.items.splice(toIdx, 0, movedItem);
+                saveState();
+                renderTable();
+              }
+            }
+          }
+
+          touchDraggedItemId = null;
+          currentTouchTargetRow = null;
+        };
+
+        tbody.addEventListener('touchend', handleTableTouchEnd);
+        tbody.addEventListener('touchcancel', handleTableTouchEnd);
+      };
+
+      let currentHistoryItemId = null;
+
+      const showPriceHistoryModal = item => {
+        currentHistoryItemId = item.id;
+        const modal = document.getElementById('priceHistoryModal');
+        document.getElementById('historyItemName').textContent = `${item.name} — سابقہ قیمتوں کا ریکارڈ`;
+        const timeline = document.getElementById('historyTimeline');
+        const emptyMsg = document.getElementById('noHistoryMessage');
+        const actionsWrap = document.getElementById('historyActionsWrap');
+        timeline.innerHTML = '';
+
+        if (!item.priceHistory || item.priceHistory.length === 0) {
+          emptyMsg.style.display = 'block';
+          if (actionsWrap) actionsWrap.style.display = 'none';
+        } else {
+          emptyMsg.style.display = 'none';
+          if (actionsWrap) actionsWrap.style.display = 'flex';
+          item.priceHistory.forEach(h => {
+            const li = document.createElement('li');
+            li.className = 'history-item';
+            const unitLabel = h.unit ? ` (${h.unit})` : ` (${getRateBasisLabel(item.qtyUnit)})`;
+            li.innerHTML = `
+              <div class="history-date">${escapeHTML(h.date)}</div>
+              <div class="history-rate">${formatNumber(h.rate)}${escapeHTML(unitLabel)}</div>
+            `;
+            timeline.appendChild(li);
+          });
+        }
+        modal.showModal();
+      };
+
+      const initApp = () => {
+        loadState();
+        const budgetInput = document.getElementById('budgetInput');
+        budgetInput.value = Number(state.budget) || 0;
+        budgetInput.addEventListener('input', () => {
+          state.budget = Math.max(0, Number(budgetInput.value) || 0);
+          saveState();
+          updateCalculations();
+        });
+        updateCategoryDropdowns();
+        updateActiveTemplateUI();
+
+        document.querySelectorAll('.unit-options-target-empty').forEach(el => {
+          el.innerHTML = getUnitOptionsHTML('', true);
+        });
+        document.querySelectorAll('.unit-options-target').forEach(el => {
+          el.innerHTML = getUnitOptionsHTML('کلوگرام', false);
+        });
+
+        const btnToggleBulk = document.getElementById('btnToggleBulk');
+        btnToggleBulk.addEventListener('click', () => {
+          isBulkEditMode = !isBulkEditMode;
+          btnToggleBulk.classList.toggle('active', isBulkEditMode);
+          btnToggleBulk.innerHTML = isBulkEditMode 
+            ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ایڈٹ مکمل`
+            : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> بلک انٹری`;
+          renderTable();
+        });
+
+        document.getElementById('searchInput').addEventListener('input', e => {
+          searchQuery = e.target.value.trim();
+          renderTable();
+        });
+        document.getElementById('categoryFilter').addEventListener('change', e => {
+          selectedCategory = e.target.value;
+          renderTable();
+        });
+
+        document.querySelectorAll('.pill').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterMode = btn.dataset.filter;
+            renderTable();
+          });
+        });
+
+        document.getElementById('btnSelectAll').addEventListener('click', () => {
+          state.items.forEach(i => state.selected[i.id] = true);
+          saveState();
+          renderTable();
+        });
+        document.getElementById('btnDeselectAll').addEventListener('click', () => {
+          state.selected = {};
+          saveState();
+          renderTable();
+        });
+
+        document.getElementById('btnClearActiveTmpl').addEventListener('click', () => {
+          activeTemplateName = null;
+          updateActiveTemplateUI();
+        });
+
+        // Template Modal Logic
+        const tmplModal = document.getElementById('templateModal');
+        document.getElementById('btnOpenTemplates').addEventListener('click', () => {
+          renderTemplatesList();
+          tmplModal.showModal();
+        });
+        document.getElementById('btnCloseTemplateModal').addEventListener('click', () => tmplModal.close());
+        document.getElementById('btnCloseTemplateFooter').addEventListener('click', () => tmplModal.close());
+
+        document.getElementById('btnSaveNewTemplate').addEventListener('click', () => {
+          const nameInput = document.getElementById('newTemplateName');
+          const name = nameInput.value.trim();
+          if (!name) {
+            alert('براہ کرم ٹیمپلیٹ کا نام درج کریں۔');
+            return;
+          }
+          const selCount = Object.values(state.selected).filter(Boolean).length;
+          if (selCount === 0) {
+            alert('ٹیمپلیٹ بنانے کے لیے لسٹ میں کم از کم ایک آئٹم منتخب (ٹک) کریں۔');
+            return;
+          }
+
+          const existingIndex = templates.findIndex(t => t.name.toLowerCase() === name.toLowerCase());
+          if (existingIndex > -1) {
+            if (!confirm(`'${name}' نام کا ٹیمپلیٹ پہلے سے موجود ہے۔ کیا آپ اسے اوور رائٹ کرنا چاہتے ہیں؟`)) {
+              return;
+            }
+            templates[existingIndex].selected = JSON.parse(JSON.stringify(state.selected));
+            templates[existingIndex].date = new Date().toLocaleDateString('ur-PK', { year: 'numeric', month: 'short', day: 'numeric' });
+          } else {
+            templates.push({
+              name: name,
+              selected: JSON.parse(JSON.stringify(state.selected)),
+              date: new Date().toLocaleDateString('ur-PK', { year: 'numeric', month: 'short', day: 'numeric' })
+            });
+          }
+
+          activeTemplateName = name;
+          updateActiveTemplateUI();
+          saveTemplates();
+          nameInput.value = '';
+          renderTemplatesList();
+          alert(`'${name}' ٹیمپلیٹ کامیابی سے محفوظ ہو گیا۔`);
+        });
+
+        // Add Item Modal
+        const addModal = document.getElementById('addItemModal');
+        const addForm = document.getElementById('addItemForm');
+        const newQtyInput = document.getElementById('new_qty');
+        const newQtyType = document.getElementById('new_qtyType');
+        const newQtyUnit = document.getElementById('new_qtyUnit');
+        const newSizeInput = document.getElementById('new_sizeVal');
+        const newSizeUnit = document.getElementById('new_sizeUnit');
+        const newRateLabel = document.getElementById('newRateLabel');
+        let previousNewQtyUnit = 'گرام';
+        let previousNewSizeUnit = newSizeUnit.value || '';
+
+        const updateNewRateLabel = () => {
+          const type = newQtyType.value;
+          const rateUnit = type === 'weight' ? 'کلوگرام' : type === 'volume' ? 'لیٹر' : 'عدد';
+          newRateLabel.textContent = `ریٹ (${getRateBasisLabel(rateUnit)})`;
+        };
+
+        newQtyInput.addEventListener('change', () => {
+          newQtyInput.value = roundMeasurement(parseFloat(newQtyInput.value) || 0) || '';
+          previousNewQtyUnit = newQtyUnit.value;
+          updateNewRateLabel();
+        });
+        newQtyType.addEventListener('change', () => {
+          const config = QUANTITY_TYPES[newQtyType.value] || QUANTITY_TYPES.weight;
+          newQtyUnit.innerHTML = getQuantityUnitOptionsHTML(newQtyType.value, config.smallUnit);
+          previousNewQtyUnit = config.smallUnit;
+          updateNewRateLabel();
+        });
+        newQtyUnit.addEventListener('change', () => {
+          const converted = convertMeasurement(newQtyInput.value, previousNewQtyUnit, newQtyUnit.value);
+          if (newQtyInput.value !== '') newQtyInput.value = converted;
+          previousNewQtyUnit = newQtyUnit.value;
+        });
+        newSizeInput.addEventListener('change', () => {
+          if (!newSizeUnit.value || newSizeInput.value === '') return;
+          const normalized = normalizeMeasurement(newSizeInput.value, newSizeUnit.value);
+          newSizeInput.value = normalized.value;
+          newSizeUnit.value = normalized.unit;
+          previousNewSizeUnit = normalized.unit;
+        });
+        newSizeUnit.addEventListener('change', () => {
+          const converted = convertMeasurement(newSizeInput.value, previousNewSizeUnit, newSizeUnit.value);
+          if (newSizeUnit.value && newSizeInput.value !== '') {
+            const normalized = normalizeMeasurement(converted, newSizeUnit.value);
+            newSizeInput.value = normalized.value;
+            newSizeUnit.value = normalized.unit;
+          }
+          previousNewSizeUnit = newSizeUnit.value;
+        });
+        const categoryModal = document.getElementById('categoryModal');
+        const openCategoryModal = () => {
+          if (!categoryModal) return;
+          renderCategoryManagerList();
+          categoryModal.showModal();
+        };
+
+        const btnOpenCatFromAdd = document.getElementById('btnOpenCatModalFromAdd');
+        if (btnOpenCatFromAdd) {
+          btnOpenCatFromAdd.addEventListener('click', openCategoryModal);
+        }
+
+        const btnOpenCatFromMain = document.getElementById('btnOpenCatModalFromMain');
+        if (btnOpenCatFromMain) {
+          btnOpenCatFromMain.addEventListener('click', openCategoryModal);
+        }
+
+        const btnCloseCat = document.getElementById('btnCloseCatModal');
+        if (btnCloseCat) {
+          btnCloseCat.addEventListener('click', () => categoryModal.close());
+        }
+
+        const btnDoneCat = document.getElementById('btnDoneCatModal');
+        if (btnDoneCat) {
+          btnDoneCat.addEventListener('click', () => categoryModal.close());
+        }
+
+        if (categoryModal) {
+          categoryModal.addEventListener('click', e => {
+            if (e.target === categoryModal) categoryModal.close();
+          });
+        }
+
+        const handleAddNewCategory = () => {
+          const inp = document.getElementById('newCatModalInput');
+          if (!inp) return;
+          const val = inp.value.trim();
+          if (!val) return;
+          if (state.categories.includes(val)) {
+            alert('یہ کیٹیگری پہلے سے موجود ہے۔');
+            return;
+          }
+          state.categories.push(val);
+          inp.value = '';
+          saveState();
+          renderCategoryManagerList();
+          updateCategoryDropdowns();
+          const newCatSelect = document.getElementById('new_category');
+          if (newCatSelect) newCatSelect.value = val;
+          renderTable();
+        };
+
+        const btnAddNewCat = document.getElementById('btnAddNewCatModal');
+        if (btnAddNewCat) {
+          btnAddNewCat.addEventListener('click', handleAddNewCategory);
+        }
+
+        const newCatInput = document.getElementById('newCatModalInput');
+        if (newCatInput) {
+          newCatInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAddNewCategory();
+            }
+          });
+        }
+
+        document.getElementById('btnOpenAddModal').addEventListener('click', () => {
+          addForm.reset();
+          newQtyType.value = 'weight';
+          newQtyInput.value = '1';
+          previousNewQtyUnit = 'گرام';
+          newQtyUnit.innerHTML = getQuantityUnitOptionsHTML('weight', 'گرام');
+          previousNewSizeUnit = newSizeUnit.value;
+          updateNewRateLabel();
+          updateCategoryDropdowns();
+          addModal.showModal();
+        });
+        document.getElementById('btnCloseAddModal').addEventListener('click', () => addModal.close());
+        document.getElementById('btnCancelAdd').addEventListener('click', () => addModal.close());
+
+        addForm.addEventListener('submit', e => {
+          e.preventDefault();
+          const name = document.getElementById('new_name').value.trim();
+          if (!name) return;
+
+          const rateVal = parseFloat(document.getElementById('new_rate').value) || 0;
+          const nextId = state.nextItemId;
+          state.nextItemId = nextId + 1;
+          const quantityValue = roundMeasurement(parseFloat(newQtyInput.value) || 1);
+          const rawSizeValue = document.getElementById('new_sizeVal').value.trim();
+          const normalizedSize = rawSizeValue && newSizeUnit.value
+            ? normalizeMeasurement(rawSizeValue, newSizeUnit.value)
+            : { value: rawSizeValue, unit: newSizeUnit.value };
+          const newItem = {
+            id: nextId,
+            name: name,
+            category: document.getElementById('new_category').value || '',
+            company: document.getElementById('new_company').value.trim(),
+            sizeVal: normalizedSize.value,
+            sizeUnit: normalizedSize.unit,
+            qty: quantityValue,
+            qtyUnit: newQtyUnit.value,
+            qtyType: newQtyType.value,
+            rate: rateVal,
+            priceHistory: rateVal > 0 ? [{
+              rate: rateVal,
+              unit: getRateBasisLabel(newQtyUnit.value),
+              date: new Date().toLocaleDateString('ur-PK', { year: 'numeric', month: 'short', day: 'numeric' }),
+              iso: new Date().toISOString()
+            }] : []
+          };
+
+          state.items.unshift(newItem);
+          state.selected[newItem.id] = true;
+          logActivity('add', 'نیا آئٹم شامل کیا گیا', `${newItem.name}${newItem.category ? ' (' + newItem.category + ')' : ''}`);
+          saveState();
+          addModal.close();
+          renderTable();
+        });
+
+        // Backup Export / Import
+        document.getElementById('btnExport').addEventListener('click', () => {
+          const payload = {
+            app: 'Grocery Budget Planner Pro',
+            version: '29.0',
+            exportedAt: new Date().toISOString(),
+            state: state,
+            templates: templates
+          };
+          const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          const backupNow = new Date();
+          const pad2 = value => String(value).padStart(2, '0');
+          const backupStamp = `${backupNow.getFullYear()}-${pad2(backupNow.getMonth() + 1)}-${pad2(backupNow.getDate())}_${pad2(backupNow.getHours())}-${pad2(backupNow.getMinutes())}-${pad2(backupNow.getSeconds())}`;
+          a.download = `Grocery_Planner_v29_${backupStamp}.json`;
+          a.click();
+          URL.revokeObjectURL(url);
+        });
+
+        const fileInput = document.getElementById('importFileInput');
+        document.getElementById('btnImportTrigger').addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', e => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = ev => {
+            try {
+              const data = JSON.parse(ev.target.result);
+              const imported = data.state || data;
+              if (imported && Array.isArray(imported.items)) {
+                if (confirm('کیا آپ واقعی یہ بیک اپ لوڈ کرنا چاہتے ہیں؟ موجودہ لسٹ بدل جائے گی۔')) {
+                  const normalizedItems = normalizeItemList(imported.items);
+                  state = {
+                    items: normalizedItems,
+                    categories: Array.isArray(imported.categories) ? imported.categories : [],
+                    selected: imported.selected || {},
+                    budget: Math.max(0, Number(imported.budget) || 0),
+                    nextItemId: getNextItemId(normalizedItems, state.nextItemId, imported.nextItemId)
+                  };
+                  document.getElementById('budgetInput').value = state.budget;
+                  if (Array.isArray(data.templates)) {
+                    templates = data.templates;
+                    saveTemplates();
+                  }
+                  activeTemplateName = null;
+                  updateActiveTemplateUI();
+                  saveState();
+                  updateCategoryDropdowns();
+                  renderTable();
+                  alert('بیک اپ کامیابی سے بحال ہو گیا۔');
+                }
+              } else {
+                alert('فائل فارمیٹ درست نہیں ہے۔');
+              }
+            } catch (err) {
+              alert('فائل پڑھنے میں نقص: ' + err.message);
+            }
+            fileInput.value = '';
+          };
+          reader.readAsText(file);
+        });
+
+        document.getElementById('btnReset').addEventListener('click', () => {
+          if (confirm('کیا آپ تمام لسٹ کو ابتدائی حالت پر بحال کرنا چاہتے ہیں؟')) {
+            const nextItemId = getNextItemId(DEFAULT_ITEMS, state.nextItemId);
+            state = {
+              items: normalizeItemList(JSON.parse(JSON.stringify(DEFAULT_ITEMS))),
+              categories: DEFAULT_CATEGORIES,
+              selected: {},
+              budget: 0,
+              nextItemId
+            };
+            document.getElementById('budgetInput').value = 0;
+            activeTemplateName = null;
+            updateActiveTemplateUI();
+            saveState();
+            updateCategoryDropdowns();
+            renderTable();
+          }
+        });
+
+        const guideModal = document.getElementById('guideModal');
+        document.getElementById('btnGuide').addEventListener('click', () => guideModal.showModal());
+        document.getElementById('btnCloseGuide').addEventListener('click', () => guideModal.close());
+
+        const qtyUnitModal = document.getElementById('qtyUnitModal');
+        document.getElementById('btnCloseQtyUnitModal').addEventListener('click', () => qtyUnitModal.close());
+        document.getElementById('btnCancelQtyUnit').addEventListener('click', () => qtyUnitModal.close());
+        document.getElementById('btnApplyQtyUnit').addEventListener('click', () => {
+          const item = state.items.find(entry => entry.id === qtyUnitTargetId);
+          const selectedUnit = document.getElementById('qtyUnitChoice').value;
+          if (!item || !selectedUnit) return;
+          item.qty = convertMeasurement(item.qty, item.qtyUnit, selectedUnit);
+          item.qtyUnit = selectedUnit;
+          item.qtyType = getQuantityType(selectedUnit);
+          saveState();
+          qtyUnitModal.close();
+          qtyUnitTargetId = null;
+          renderTable();
+        });
+
+        const historyModal = document.getElementById('priceHistoryModal');
+        document.getElementById('btnCloseHistoryModal').addEventListener('click', () => historyModal.close());
+
+        const btnClearHistory = document.getElementById('btnClearHistoryBtn');
+        if (btnClearHistory) {
+          btnClearHistory.addEventListener('click', () => {
+            const item = state.items.find(i => i.id === currentHistoryItemId);
+            if (!item) return;
+            if (confirm(`کیا آپ واقعی "${item.name}" کی سابقہ قیمتوں کی ہسٹری صاف کرنا چاہتے ہیں؟`)) {
+              item.priceHistory = [];
+              saveState();
+              showPriceHistoryModal(item);
+            }
+          });
+        }
+
+        const activityLogModal = document.getElementById('activityLogModal');
+        document.getElementById('btnActivityLog').addEventListener('click', showActivityLogModal);
+        document.getElementById('btnCloseActivityLogModal').addEventListener('click', () => activityLogModal.close());
+
+        const btnClearActivityLog = document.getElementById('btnClearActivityLogBtn');
+        if (btnClearActivityLog) {
+          btnClearActivityLog.addEventListener('click', () => {
+            if (confirm('کیا آپ واقعی تمام سرگرمیوں کا ریکارڈ صاف کرنا چاہتے ہیں؟')) {
+              state.activityLog = [];
+              saveState();
+              showActivityLogModal();
+            }
+          });
+        }
+
+        // پرنٹ ڈائیلاگ
+        const printModal = document.getElementById('printModal');
+        document.getElementById('btnPrintTrigger').addEventListener('click', () => {
+          const selectedCount = Object.values(state.selected).filter(Boolean).length;
+          if (selectedCount === 0) {
+            alert('پرنٹ کرنے کے لیے براہ کرم کم از کم ایک آئٹم منتخب (ٹک) کریں۔');
+            return;
+          }
+          printModal.showModal();
+        });
+
+        document.getElementById('btnClosePrintModal').addEventListener('click', () => printModal.close());
+        document.getElementById('btnCancelPrint').addEventListener('click', () => printModal.close());
+
+        document.getElementById('btnExecutePrint').addEventListener('click', () => {
+          const printType = document.querySelector('input[name="printType"]:checked').value;
+          printModal.close();
+
+          buildDedicatedPrintDOM(printType);
+
+          setTimeout(() => {
+            window.print();
+          }, 250);
+        });
+
+        // -------------------------------------------------------------
+        // خودکار سلیکشن برائے عددی ان پٹس (Auto-select on Focus/Click)
+        // -------------------------------------------------------------
+        const setupNumericAutoSelect = () => {
+          let newlyFocusedInput = null;
+
+          const isNumericInput = el => {
+            if (!el || el.tagName !== 'INPUT') return false;
+            return el.type === 'number' ||
+                   el.classList.contains('num-field') ||
+                   el.classList.contains('in-qty') ||
+                   el.classList.contains('in-rate') ||
+                   el.id === 'budgetInput';
+          };
+
+          const trySelect = el => {
+            try {
+              if (document.activeElement === el && typeof el.select === 'function') {
+                el.select();
+              }
+            } catch (_) {}
+          };
+
+          document.addEventListener('focusin', e => {
+            if (isNumericInput(e.target)) {
+              newlyFocusedInput = e.target;
+              setTimeout(() => {
+                trySelect(e.target);
+              }, 0);
+            }
+          });
+
+          document.addEventListener('mouseup', e => {
+            if (newlyFocusedInput && e.target === newlyFocusedInput) {
+              setTimeout(() => {
+                trySelect(newlyFocusedInput);
+                newlyFocusedInput = null;
+              }, 0);
+            } else {
+              newlyFocusedInput = null;
+            }
+          });
+        };
+
+        attachTableDelegations();
+        setupNumericAutoSelect();
+        initTheme();
+        renderTable();
+      };
+
+      document.addEventListener('DOMContentLoaded', initApp);
+    })();
+  </script>
+</body>
+</html>
