@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>گروسری بجٹ پلانر — 100% درست اور حتمی ایڈیشن</title>
+
+  <!-- PWA & Mobile Standalone App Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="گروسری پلانر">
+  <meta name="application-name" content="گروسری پلانر">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -250,6 +263,97 @@
       background: var(--primary);
       color: #fff;
       box-shadow: 0 2px 6px var(--primary-glow);
+    }
+
+    /* Mobile More Options Triggers & Menu */
+    .btn-more-trigger,
+    .btn-mobile-more-toolbar {
+      display: none;
+    }
+
+    .btn-more-trigger {
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-family: var(--font-ur);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-more-trigger:hover, .btn-more-trigger:active {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-mobile-more-toolbar {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* More Actions Modal (Mobile Tools Menu) */
+    .more-actions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .more-action-card {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text-main);
+      cursor: pointer;
+      text-align: right;
+      transition: all 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+      font-family: var(--font-ur);
+    }
+    .more-action-card:hover, .more-action-card:active {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .more-action-icon {
+      font-size: 1.35rem;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      background: var(--surface-subtle);
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+    }
+    .more-action-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      flex: 1;
+    }
+    .more-action-text strong {
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+    .more-action-text small {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .more-action-card.danger-card:hover, .more-action-card.danger-card:active {
+      background: var(--danger-soft);
+      border-color: var(--danger);
+    }
+    .more-action-card.danger-card strong {
+      color: var(--danger);
     }
 
     .container {
@@ -1121,11 +1225,28 @@
         width: 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-        padding-bottom: 4px;
-        scrollbar-width: none;
+        padding-bottom: 6px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary) transparent;
       }
       .action-group::-webkit-scrollbar {
-        display: none;
+        display: block;
+        height: 3px;
+      }
+      .action-group::-webkit-scrollbar-track {
+        background: var(--surface-subtle);
+        border-radius: 4px;
+      }
+      .action-group::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 4px;
+      }
+
+      .btn-more-trigger {
+        display: inline-flex !important;
+      }
+      .btn-mobile-more-toolbar {
+        display: inline-flex !important;
       }
       .btn-toggle-bulk {
         white-space: nowrap;
@@ -1977,18 +2098,32 @@
   <header class="app-header">
     <div class="header-container">
       <div class="brand-group">
-        <div class="brand-icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
-            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+        <div class="brand-title-wrap" style="display:flex; align-items:center; gap:0.6rem;">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>گروسری بجٹ پلانر</h1>
+          </div>
+        </div>
+
+        <button type="button" class="btn-more-trigger" id="btnOpenMoreModal" title="مزید اختیارات (بیک اپ، پرنٹ، تھیم)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
           </svg>
-        </div>
-        <div class="brand-text">
-          <h1>گروسری بجٹ پلانر</h1>
-        </div>
+          <span>مزید مینو</span>
+        </button>
       </div>
       
       <nav class="action-group" aria-label="ٹول بار">
+        <button type="button" class="btn-toggle-bulk btn-mobile-more-toolbar" id="btnOpenMoreModalToolbar" title="مزید اختیارات (بیک اپ، پرنٹ، تھیم)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          <span>مزید اختیارات ⋮</span>
+        </button>
+
         <button type="button" class="btn-toggle-bulk" id="btnToggleViewMode" title="کارڈ ویو / ٹیبل ویو تبدیل کریں">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           <span id="viewModeText">کارڈ ویو</span>
@@ -2365,6 +2500,74 @@
           🗑️ تمام سرگرمیاں صاف کریں
         </button>
       </div>
+    </div>
+  <!-- Modal: Mobile More Actions Modal (موبائل مزید اختیارات و ٹولز) -->
+  <dialog class="app-modal" id="moreActionsModal" style="max-width: 480px;">
+    <div class="modal-header">
+      <h2>⚙️ مزید ٹولز اور اختیارات</h2>
+      <button type="button" class="btn-icon" id="btnCloseMoreModal" title="بند کریں">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="more-actions-grid">
+        <button type="button" class="more-action-card" id="btnMoreExport">
+          <span class="more-action-icon">💾</span>
+          <div class="more-action-text">
+            <strong>بیک اپ محفوظ کریں (Export)</strong>
+            <small>اپنا تمام ڈیٹا اور ریٹس JSON فائل میں ڈاؤن لوڈ کریں</small>
+          </div>
+        </button>
+
+        <button type="button" class="more-action-card" id="btnMoreImport">
+          <span class="more-action-icon">📥</span>
+          <div class="more-action-text">
+            <strong>بیک اپ بحال کریں (Import)</strong>
+            <small>کمپیوٹر یا پرانا JSON بیک اپ فون میں لوڈ کریں</small>
+          </div>
+        </button>
+
+        <button type="button" class="more-action-card" id="btnMorePrint">
+          <span class="more-action-icon">🖨️</span>
+          <div class="more-action-text">
+            <strong>پرنٹ / PDF لسٹ بنائیں</strong>
+            <small>دکاندار لسٹ یا قیمتوں والی مکمل لسٹ پرنٹ کریں</small>
+          </div>
+        </button>
+
+        <button type="button" class="more-action-card" id="btnMoreTheme">
+          <span class="more-action-icon">🌗</span>
+          <div class="more-action-text">
+            <strong>ڈارک / لائٹ موڈ تبدیل کریں</strong>
+            <small>اسکرین کی تھیم لائٹ یا ڈارک میں سوئچ کریں</small>
+          </div>
+        </button>
+
+        <button type="button" class="more-action-card" id="btnMoreGuide">
+          <span class="more-action-icon">📏</span>
+          <div class="more-action-text">
+            <strong>پیمائش گائیڈ</strong>
+            <small>گرام، کلوگرام، لیٹر اور اکائیوں کے اصول</small>
+          </div>
+        </button>
+
+        <button type="button" class="more-action-card" id="btnMoreActivity">
+          <span class="more-action-icon">📋</span>
+          <div class="more-action-text">
+            <strong>حالیہ سرگرمیاں / آڈٹ لاگ</strong>
+            <small>تبدیل شدہ ریٹس اور ایکشنز کی ہسٹری</small>
+          </div>
+        </button>
+
+        <button type="button" class="more-action-card danger-card" id="btnMoreReset">
+          <span class="more-action-icon">🔄</span>
+          <div class="more-action-text">
+            <strong>فہرست ری سیٹ کریں</strong>
+            <small>ڈیٹا صاف کر کے ابتدائی 111 اشیاء پر واپس جائیں</small>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-action btn-secondary" id="btnCloseMoreModalFooter">بند کریں</button>
     </div>
   </dialog>
 
@@ -5704,6 +5907,102 @@
             }
           }, { passive: true });
         };
+
+        // -------------------------------------------------------------
+        // MOBILE MORE ACTIONS MODAL LOGIC (موبائل مزید اختیارات)
+        // -------------------------------------------------------------
+        const moreModal = document.getElementById('moreActionsModal');
+        const openMoreModal = () => {
+          if (moreModal) moreModal.showModal();
+        };
+        const closeMoreModal = () => {
+          if (moreModal) moreModal.close();
+        };
+
+        const btnOpenMore1 = document.getElementById('btnOpenMoreModal');
+        if (btnOpenMore1) btnOpenMore1.addEventListener('click', openMoreModal);
+
+        const btnOpenMore2 = document.getElementById('btnOpenMoreModalToolbar');
+        if (btnOpenMore2) btnOpenMore2.addEventListener('click', openMoreModal);
+
+        const btnCloseMore = document.getElementById('btnCloseMoreModal');
+        if (btnCloseMore) btnCloseMore.addEventListener('click', closeMoreModal);
+
+        const btnCloseMoreFooter = document.getElementById('btnCloseMoreModalFooter');
+        if (btnCloseMoreFooter) btnCloseMoreFooter.addEventListener('click', closeMoreModal);
+
+        if (moreModal) {
+          moreModal.addEventListener('click', e => {
+            if (e.target === moreModal) closeMoreModal();
+          });
+        }
+
+        const btnMoreExport = document.getElementById('btnMoreExport');
+        if (btnMoreExport) {
+          btnMoreExport.addEventListener('click', () => {
+            closeMoreModal();
+            document.getElementById('btnExport').click();
+          });
+        }
+
+        const btnMoreImport = document.getElementById('btnMoreImport');
+        if (btnMoreImport) {
+          btnMoreImport.addEventListener('click', () => {
+            closeMoreModal();
+            document.getElementById('importFileInput').click();
+          });
+        }
+
+        const btnMorePrint = document.getElementById('btnMorePrint');
+        if (btnMorePrint) {
+          btnMorePrint.addEventListener('click', () => {
+            closeMoreModal();
+            document.getElementById('btnPrintTrigger').click();
+          });
+        }
+
+        const btnMoreTheme = document.getElementById('btnMoreTheme');
+        if (btnMoreTheme) {
+          btnMoreTheme.addEventListener('click', () => {
+            closeMoreModal();
+            document.getElementById('btnThemeToggle').click();
+          });
+        }
+
+        const btnMoreGuide = document.getElementById('btnMoreGuide');
+        if (btnMoreGuide) {
+          btnMoreGuide.addEventListener('click', () => {
+            closeMoreModal();
+            document.getElementById('btnGuide').click();
+          });
+        }
+
+        const btnMoreActivity = document.getElementById('btnMoreActivity');
+        if (btnMoreActivity) {
+          btnMoreActivity.addEventListener('click', () => {
+            closeMoreModal();
+            document.getElementById('btnActivityLog').click();
+          });
+        }
+
+        const btnMoreReset = document.getElementById('btnMoreReset');
+        if (btnMoreReset) {
+          btnMoreReset.addEventListener('click', () => {
+            closeMoreModal();
+            document.getElementById('btnReset').click();
+          });
+        }
+
+        // -------------------------------------------------------------
+        // PWA SERVICE WORKER REGISTRATION
+        // -------------------------------------------------------------
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').catch(err => {
+              console.warn('Service worker registration failed:', err);
+            });
+          });
+        }
 
         attachTableDelegations();
         setupNumericAutoSelect();
