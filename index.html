@@ -2,7 +2,7 @@
 <html lang="ur" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>گروسری بجٹ پلانر — 100% درست اور حتمی ایڈیشن</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -379,6 +379,12 @@
     }
     .pill:hover { border-color: var(--primary); color: var(--primary); }
     .pill.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .cat-filter-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
 
     .category-filter-select {
       padding: 0.45rem 0.75rem;
@@ -1064,6 +1070,691 @@
       gap: 0.35rem;
     }
 
+    /* =============================================================
+       MOBILE RESPONSIVE & TOUCH OPTIMIZATION (موبائل لے آؤٹ)
+       ============================================================= */
+    @media (max-width: 768px) {
+      body {
+        padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+      }
+
+      .container {
+        padding-inline: 0.75rem;
+      }
+
+      /* Sticky Header */
+      .app-header {
+        position: sticky;
+        top: 0;
+        z-index: 110;
+      }
+      .header-container {
+        padding: 0.5rem 0.75rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+      .brand-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+      .brand-icon {
+        width: 34px;
+        height: 34px;
+      }
+      .brand-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .brand-text h1 {
+        font-size: 1.05rem;
+      }
+
+      /* Horizontal Scrollable Toolbar for Mobile */
+      .action-group {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.35rem;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+      }
+      .action-group::-webkit-scrollbar {
+        display: none;
+      }
+      .btn-toggle-bulk {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 0.35rem 0.65rem;
+        font-size: 0.78rem;
+        height: 36px;
+      }
+      .btn-icon {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+      }
+
+      /* Dashboard Grid */
+      .dashboard-section {
+        margin-block-start: 0.75rem;
+      }
+      .dashboard-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+        padding: 0.65rem 0.75rem;
+        border-radius: var(--radius-md);
+      }
+      .metric-card {
+        padding: 0.45rem 0.5rem;
+        min-height: 58px;
+      }
+      .metric-value {
+        font-size: 1.15rem;
+      }
+      .metric-budget-input {
+        font-size: 1.15rem;
+        width: 100%;
+        max-width: 130px;
+      }
+      .metric-label {
+        font-size: 0.7rem;
+        margin-block-start: 0.15rem;
+      }
+
+      /* Controls Section */
+      .controls-section {
+        margin-block-start: 0.75rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.55rem;
+      }
+      .search-bar {
+        width: 100%;
+        min-width: 0;
+      }
+      .search-input {
+        font-size: 16px;
+        padding: 0.6rem 0.85rem 0.6rem 2.2rem;
+      }
+      .cat-filter-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        width: 100%;
+      }
+      .category-filter-select {
+        flex: 1;
+        width: 100%;
+        font-size: 16px;
+        padding: 0.55rem 0.75rem;
+      }
+      .filter-pills {
+        width: 100%;
+        display: flex;
+        gap: 0.35rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .filter-pills::-webkit-scrollbar {
+        display: none;
+      }
+      .pill {
+        flex: 1;
+        text-align: center;
+        padding: 0.45rem 0.4rem;
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+      .active-template-badge {
+        width: 100%;
+        justify-content: space-between;
+        box-sizing: border-box;
+      }
+      .btn-add-primary {
+        width: 100%;
+        justify-content: center;
+        padding: 0.65rem 1rem;
+        font-size: 0.92rem;
+        border-radius: var(--radius-md);
+      }
+
+      /* Table Section */
+      .table-section {
+        margin-block-start: 0.75rem;
+        margin-block-end: 8rem;
+      }
+
+      /* =========================================================
+         MOBILE CARD VIEW (DEFAULT ON MOBILE UNLESS TABLE VIEW FORCED)
+         ========================================================= */
+      body:not(.force-table-view) .table-container {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        overflow-x: visible;
+      }
+
+      body:not(.force-table-view) .data-table {
+        min-width: 0 !important;
+        width: 100% !important;
+        display: block;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      body:not(.force-table-view) .data-table thead {
+        display: none;
+      }
+
+      body:not(.force-table-view) .data-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        width: 100%;
+      }
+
+      /* Category Header in Card Mode */
+      body:not(.force-table-view) .data-table tr.category-header-row {
+        display: block;
+        width: 100%;
+        border-radius: var(--radius-md);
+        border: 1.5px solid var(--border);
+        background: var(--surface-subtle) !important;
+        margin-top: 0.65rem;
+        margin-bottom: 0.2rem;
+        box-shadow: var(--shadow-sm);
+      }
+
+      body:not(.force-table-view) .category-header-cell {
+        display: block;
+        width: 100%;
+        padding: 0.55rem 0.85rem !important;
+        border: none !important;
+      }
+
+      body:not(.force-table-view) .category-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      /* Card Container */
+      body:not(.force-table-view) .data-table tbody tr:not(.category-header-row) {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 0.75rem 0.85rem;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        gap: 0.55rem 0.45rem;
+        transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s, transform 0.15s;
+      }
+
+      body:not(.force-table-view) .data-table tbody tr:not(.category-header-row).is-selected {
+        border-color: var(--primary);
+        background: var(--table-row-selected);
+        box-shadow: 0 2px 10px var(--primary-glow);
+      }
+
+      body:not(.force-table-view) .data-table tbody tr:not(.category-header-row).is-editing {
+        border-color: var(--warning);
+        background: var(--table-row-editing) !important;
+      }
+
+      body:not(.force-table-view) .data-table tbody tr:not(.category-header-row).is-dragging {
+        opacity: 0.55;
+        background: var(--table-row-drag) !important;
+        outline: 2px dashed var(--primary);
+        transform: scale(0.98);
+      }
+
+      body:not(.force-table-view) .data-table tbody tr:not(.category-header-row).drag-over {
+        border-block-start: 3px solid var(--primary) !important;
+        background: var(--table-row-hover);
+      }
+
+      body:not(.force-table-view) .data-table td {
+        border: none !important;
+        padding: 0 !important;
+      }
+
+      /* Card Elements: Row 1 */
+      body:not(.force-table-view) .drag-cell {
+        order: 1;
+        width: 30px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        color: var(--text-subtle);
+        touch-action: none;
+        cursor: grab;
+        flex-shrink: 0;
+      }
+
+      body:not(.force-table-view) .check-cell {
+        order: 2;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      body:not(.force-table-view) .custom-check {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+      }
+
+      body:not(.force-table-view) .custom-check svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      body:not(.force-table-view) .col-name {
+        order: 3;
+        flex: 1 1 calc(100% - 150px);
+        min-width: 120px;
+        padding-inline-end: 65px;
+      }
+
+      body:not(.force-table-view) .col-name .item-identity {
+        font-size: 0.92rem;
+        line-height: 1.4;
+      }
+
+      body:not(.force-table-view) .col-name .item-identity-name {
+        font-size: 0.96rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      body:not(.force-table-view) .col-name .item-identity-detail {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      body:not(.force-table-view) .index-cell {
+        order: 4;
+        position: absolute;
+        inset-inline-end: 44px;
+        top: 0.75rem;
+      }
+
+      body:not(.force-table-view) .index-cell .num-field {
+        background: var(--surface-subtle);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0.15rem 0.4rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        display: inline-block;
+      }
+
+      body:not(.force-table-view) tr:not(.is-editing) .action-cell {
+        order: 5;
+        position: absolute;
+        inset-inline-end: 0.75rem;
+        top: 0.65rem;
+      }
+
+      body:not(.force-table-view) tr:not(.is-editing) .action-cell .row-btn {
+        width: 32px;
+        height: 32px;
+      }
+
+      /* Card Elements: Row 2 (Quantity, Rate, Amount) */
+      body:not(.force-table-view) .col-qty {
+        order: 6;
+        flex: 1 1 0;
+        min-width: 100px;
+        background: var(--surface-subtle);
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius-sm);
+        padding: 0.35rem 0.5rem !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 52px;
+      }
+
+      body:not(.force-table-view) .col-qty::before {
+        content: "مقدار";
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 0.15rem;
+        display: block;
+        text-align: start;
+      }
+
+      body:not(.force-table-view) .col-qty .qty-cell-inner {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        width: 100%;
+      }
+
+      body:not(.force-table-view) .col-qty .in-qty {
+        min-width: 48px;
+        max-width: 65px;
+        font-size: 15px;
+        padding: 0.25rem 0.35rem;
+      }
+
+      body:not(.force-table-view) .col-qty .qty-unit-trigger {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.78rem;
+        white-space: nowrap;
+        border-radius: var(--radius-sm);
+      }
+
+      body:not(.force-table-view) .col-rate {
+        order: 7;
+        flex: 1 1 0;
+        min-width: 85px;
+        background: var(--surface-subtle);
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius-sm);
+        padding: 0.35rem 0.5rem !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 52px;
+      }
+
+      body:not(.force-table-view) .col-rate::before {
+        content: "ریٹ";
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 0.15rem;
+        display: block;
+        text-align: start;
+      }
+
+      body:not(.force-table-view) .col-rate .rate-cell-inner,
+      body:not(.force-table-view) .col-rate .rate-cell-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.35rem;
+        width: 100%;
+        padding: 0;
+      }
+
+      body:not(.force-table-view) .col-rate .rate-text-val {
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      body:not(.force-table-view) .col-rate .in-rate {
+        min-width: 55px;
+        max-width: 75px;
+        font-size: 15px;
+        padding: 0.25rem 0.35rem;
+      }
+
+      body:not(.force-table-view) .col-amt {
+        order: 8;
+        flex: 1 1 0;
+        min-width: 85px;
+        background: var(--surface-subtle);
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius-sm);
+        padding: 0.35rem 0.5rem !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 52px;
+      }
+
+      body:not(.force-table-view) .col-amt::before {
+        content: "کل رقم";
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 0.15rem;
+        display: block;
+        text-align: end;
+      }
+
+      body:not(.force-table-view) .col-amt .amount-display {
+        font-size: 1.05rem;
+        padding-inline-end: 0;
+        text-align: end;
+      }
+
+      /* Card in Editing Mode */
+      body:not(.force-table-view) tr.is-editing .index-cell {
+        position: static;
+        order: 3;
+        margin-inline-start: auto;
+      }
+
+      body:not(.force-table-view) tr.is-editing .col-name {
+        order: 4;
+        flex: 0 0 100%;
+        width: 100%;
+        padding-inline-end: 0;
+      }
+
+      body:not(.force-table-view) tr.is-editing .identity-edit-fields {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        padding-block: 0.25rem;
+      }
+
+      body:not(.force-table-view) tr.is-editing .identity-edit-secondary {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem;
+      }
+
+      body:not(.force-table-view) tr.is-editing .identity-edit-size {
+        display: flex;
+        gap: 0.25rem;
+      }
+
+      body:not(.force-table-view) tr.is-editing .identity-edit-size input {
+        width: 55%;
+      }
+
+      body:not(.force-table-view) tr.is-editing .identity-edit-size select {
+        width: 45%;
+      }
+
+      body:not(.force-table-view) tr.is-editing .table-input,
+      body:not(.force-table-view) tr.is-editing select {
+        font-size: 15px;
+        padding: 0.45rem 0.5rem;
+      }
+
+      body:not(.force-table-view) tr.is-editing .col-qty {
+        order: 5;
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 130px;
+      }
+
+      body:not(.force-table-view) tr.is-editing .col-rate {
+        order: 6;
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 130px;
+      }
+
+      body:not(.force-table-view) tr.is-editing .col-amt {
+        order: 7;
+        flex: 0 0 100%;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      body:not(.force-table-view) tr.is-editing .col-amt::before {
+        margin-bottom: 0;
+        font-size: 0.8rem;
+      }
+
+      body:not(.force-table-view) tr.is-editing .action-cell {
+        order: 8;
+        position: static;
+        flex: 0 0 100%;
+        width: 100%;
+      }
+
+      body:not(.force-table-view) tr.is-editing .action-flex {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding-top: 0.25rem;
+      }
+
+      body:not(.force-table-view) tr.is-editing .action-flex .row-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-sm);
+      }
+
+      body:not(.force-table-view) tr.is-editing .action-flex .row-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* Checkout Bar on Mobile */
+      .checkout-bar {
+        padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom, 0px)) 0.75rem;
+      }
+      .checkout-inner {
+        gap: 0.4rem;
+      }
+      .checkout-total {
+        flex-shrink: 0;
+      }
+      .checkout-label {
+        font-size: 0.68rem;
+      }
+      .checkout-amount {
+        font-size: 1.25rem;
+      }
+      .checkout-actions {
+        gap: 0.35rem;
+      }
+      .btn-action {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.78rem;
+      }
+
+      /* Modals on Mobile */
+      dialog.app-modal {
+        width: 95%;
+        max-width: 95%;
+        max-height: 90vh;
+        border-radius: var(--radius-md);
+      }
+      .modal-header {
+        padding: 0.75rem 1rem;
+      }
+      .modal-header h2 {
+        font-size: 0.95rem;
+      }
+      .modal-body {
+        padding: 1rem 0.85rem;
+        max-height: 72vh;
+      }
+      .modal-footer {
+        padding: 0.75rem 1rem;
+        gap: 0.4rem;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .form-control {
+        font-size: 16px;
+        padding: 0.6rem 0.75rem;
+      }
+
+      .template-item-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+      .template-item-actions {
+        justify-content: flex-end;
+      }
+
+      .print-option-card {
+        padding: 0.75rem;
+        gap: 0.6rem;
+      }
+      .print-option-text h4 {
+        font-size: 0.88rem;
+      }
+      .print-option-text p {
+        font-size: 0.75rem;
+      }
+    }
+
+    /* Extra Small Screen Adjustments (<= 400px) */
+    @media (max-width: 400px) {
+      .container {
+        padding-inline: 0.45rem;
+      }
+      .header-container {
+        padding: 0.45rem 0.55rem;
+      }
+      .brand-text h1 {
+        font-size: 0.95rem;
+      }
+      .dashboard-grid {
+        padding: 0.5rem 0.55rem;
+        gap: 0.4rem;
+      }
+      .metric-value,
+      .metric-budget-input {
+        font-size: 1.05rem;
+      }
+      .metric-label {
+        font-size: 0.65rem;
+      }
+      .btn-action {
+        padding: 0.4rem 0.5rem;
+        font-size: 0.74rem;
+      }
+      body:not(.force-table-view) .data-table tbody tr:not(.category-header-row) {
+        padding: 0.6rem 0.65rem;
+        gap: 0.45rem 0.35rem;
+      }
+      body:not(.force-table-view) .col-qty .in-qty {
+        min-width: 42px;
+        max-width: 55px;
+      }
+      body:not(.force-table-view) .col-qty .qty-unit-trigger {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.74rem;
+      }
+    }
+
     /* -------------------------------------------------------------
        DEDICATED STATIC PRINT CANVAS (پرنٹ لے آؤٹ)
        ------------------------------------------------------------- */
@@ -1298,6 +1989,11 @@
       </div>
       
       <nav class="action-group" aria-label="ٹول بار">
+        <button type="button" class="btn-toggle-bulk" id="btnToggleViewMode" title="کارڈ ویو / ٹیبل ویو تبدیل کریں">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span id="viewModeText">کارڈ ویو</span>
+        </button>
+
         <button type="button" class="btn-toggle-bulk" id="btnOpenTemplates" title="محفوظ ٹیمپلیٹس">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
           ٹیمپلیٹس
@@ -1343,7 +2039,7 @@
     <section class="dashboard-section" aria-label="بجٹ سمری">
       <div class="dashboard-grid">
         <div class="metric-card">
-          <input type="number" id="budgetInput" class="metric-budget-input" value="0" min="0" step="1" aria-label="کل بجٹ">
+          <input type="number" inputmode="decimal" id="budgetInput" class="metric-budget-input" value="0" min="0" step="1" aria-label="کل بجٹ">
           <span class="metric-label">کل بجٹ</span>
         </div>
         <div class="metric-card" id="remainingCard">
@@ -1369,7 +2065,7 @@
         <input type="search" id="searchInput" class="search-input" placeholder="اشیاء یا کمپنی تلاش کریں..." autocomplete="off">
       </div>
       
-      <div style="display:flex; align-items:center; gap:0.35rem;">
+      <div class="cat-filter-wrapper">
         <select id="categoryFilter" class="category-filter-select">
           <option value="all">تمام کیٹیگریز</option>
         </select>
@@ -1402,7 +2098,7 @@
             <tr>
               <th style="width: 32px;" class="drag-cell" aria-label="ترتیب"></th>
               <th style="width: 36px;" class="check-cell" aria-label="چیک باکس"></th>
-              <th style="width: 36px;">#</th>
+              <th style="width: 36px;" class="index-cell">#</th>
               <th class="text-start col-name">نام کی تفصیل <small>(نام، کمپنی اور سائز)</small></th>
               <th class="text-start col-qty">مقدار</th>
               <th class="text-start col-rate">ریٹ</th>
@@ -1515,7 +2211,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="new_sizeVal">سائز ویلیو</label>
-            <input type="number" id="new_sizeVal" class="form-control" placeholder="مثلاً 500" min="0" step="any">
+            <input type="number" inputmode="decimal" id="new_sizeVal" class="form-control" placeholder="مثلاً 500" min="0" step="any">
           </div>
           <div class="form-group">
             <label for="new_sizeUnit">سائز کا یونٹ</label>
@@ -1525,7 +2221,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="new_qty">مقدار *</label>
-            <input type="number" id="new_qty" class="form-control" value="1" min="0.01" step="any" required>
+            <input type="number" inputmode="decimal" id="new_qty" class="form-control" value="1" min="0.01" step="any" required>
             <select id="new_qtyUnit" class="form-control" aria-label="مقدار کی اکائی">
               <option value="گرام">گرام</option>
               <option value="کلوگرام">کلوگرام</option>
@@ -1542,7 +2238,7 @@
         </div>
         <div class="form-group">
             <label for="new_rate" id="newRateLabel">ریٹ (فی کلوگرام)</label>
-          <input type="number" id="new_rate" class="form-control" placeholder="0" min="0">
+          <input type="number" inputmode="decimal" id="new_rate" class="form-control" placeholder="0" min="0">
         </div>
       </div>
       <div class="modal-footer">
@@ -3713,6 +4409,44 @@
       };
 
       // -------------------------------------------------------------
+      // MOBILE VIEW MODE (کارڈ ویو / ٹیبل ویو)
+      // -------------------------------------------------------------
+      const initViewMode = () => {
+        const btnToggleViewMode = document.getElementById('btnToggleViewMode');
+        const viewModeText = document.getElementById('viewModeText');
+        const savedViewMode = localStorage.getItem('GROCERY_VIEW_MODE') || 'cards';
+
+        const applyViewMode = mode => {
+          if (mode === 'table') {
+            document.body.classList.add('force-table-view');
+            if (btnToggleViewMode) {
+              btnToggleViewMode.classList.add('active');
+              btnToggleViewMode.setAttribute('title', 'کارڈ ویو موڈ منتخب کریں');
+            }
+            if (viewModeText) viewModeText.textContent = 'ٹیبل ویو';
+          } else {
+            document.body.classList.remove('force-table-view');
+            if (btnToggleViewMode) {
+              btnToggleViewMode.classList.remove('active');
+              btnToggleViewMode.setAttribute('title', 'ٹیبل ویو موڈ منتخب کریں');
+            }
+            if (viewModeText) viewModeText.textContent = 'کارڈ ویو';
+          }
+        };
+
+        applyViewMode(savedViewMode);
+
+        if (btnToggleViewMode) {
+          btnToggleViewMode.addEventListener('click', () => {
+            const isTable = document.body.classList.contains('force-table-view');
+            const nextMode = isTable ? 'cards' : 'table';
+            localStorage.setItem('GROCERY_VIEW_MODE', nextMode);
+            applyViewMode(nextMode);
+          });
+        }
+      };
+
+      // -------------------------------------------------------------
       // TEMPLATES MANAGER
       // -------------------------------------------------------------
       const updateActiveTemplateUI = () => {
@@ -3894,19 +4628,19 @@
             if (isRowEditing) {
               tr.innerHTML = `
                 <td class="drag-cell" title="ترتیب بدلیں">—</td>
-                <td class="check-cell">
+                <td class="check-cell" data-action="toggle" data-id="${item.id}">
                   <div class="custom-check" data-action="toggle" data-id="${item.id}" role="checkbox" aria-checked="${isSelected}">
                     <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                   </div>
                 </td>
-                <td data-label="#"><span class="num-field" style="font-size:0.75rem; color:var(--text-subtle);">${globalIndex}</span></td>
+                <td data-label="#" class="index-cell"><span class="num-field" style="font-size:0.75rem; color:var(--text-subtle);">${globalIndex}</span></td>
                 <td data-label="نام کی تفصیل (نام، کمپنی اور سائز)" class="col-name">
                   <div class="identity-edit-fields">
                     <input type="text" class="table-input text-field in-bulk-name" data-id="${item.id}" value="${escapeHTML(item.name)}" placeholder="نام آئٹم">
                     <div class="identity-edit-secondary">
                       <input type="text" class="table-input text-field in-bulk-co" data-id="${item.id}" value="${escapeHTML(item.company)}" placeholder="کمپنی / برانڈ">
                       <div class="identity-edit-size">
-                        <input type="number" class="table-input num-field in-bulk-sv" data-id="${item.id}" value="${item.sizeVal || ''}" min="0" step="any" placeholder="سائز">
+                        <input type="number" inputmode="decimal" class="table-input num-field in-bulk-sv" data-id="${item.id}" value="${item.sizeVal || ''}" min="0" step="any" placeholder="سائز">
                         <select class="unit-selector in-bulk-su" data-id="${item.id}">${getUnitOptionsHTML(item.sizeUnit, true)}</select>
                       </div>
                     </div>
@@ -3917,7 +4651,7 @@
                 </td>
                 <td data-label="مقدار" class="col-qty">
                   <div class="qty-cell-inner" style="flex-wrap:wrap;">
-                    <input type="number" class="table-input num-field in-qty" data-id="${item.id}" value="${item.qty || ''}" min="0.01" step="any" placeholder="0">
+                    <input type="number" inputmode="decimal" class="table-input num-field in-qty" data-id="${item.id}" value="${item.qty || ''}" min="0.01" step="any" placeholder="0">
                     <button type="button" class="qty-unit-trigger qty-unit-label" data-action="choose-qty-unit" data-id="${item.id}" title="اکائی بدلنے کے لیے کلک کریں">${escapeHTML(item.qtyUnit)}</button>
                     <select class="unit-selector in-bulk-qt" data-id="${item.id}">
                       <option value="weight" ${item.qtyType === 'weight' ? 'selected' : ''}>وزن</option>
@@ -3928,7 +4662,7 @@
                 </td>
                 <td data-label="ریٹ" class="col-rate">
                   <div class="rate-cell-wrap">
-                    <input type="number" class="table-input num-field in-rate" data-id="${item.id}" value="${item.rate || ''}" min="0" step="1" placeholder="0" style="width:80px;" title="${escapeHTML(getRateBasisLabel(item.qtyUnit))} ریٹ درج کریں">
+                    <input type="number" inputmode="decimal" class="table-input num-field in-rate" data-id="${item.id}" value="${item.rate || ''}" min="0" step="1" placeholder="0" style="width:80px;" title="${escapeHTML(getRateBasisLabel(item.qtyUnit))} ریٹ درج کریں">
                     <button type="button" class="row-btn btn-log" data-action="view-history" data-id="${item.id}" title="ہسٹری" style="width:24px; height:24px;">
                       <svg viewBox="0 0 24 24" style="width:12px; height:12px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </button>
@@ -3965,12 +4699,12 @@
               const identityParts = [item.name, item.company, sizeText].filter(Boolean);
               tr.innerHTML = `
                 <td class="drag-cell" title="ترتیب بدلیں">⠿</td>
-                <td class="check-cell">
+                <td class="check-cell" data-action="toggle" data-id="${item.id}">
                   <div class="custom-check" data-action="toggle" data-id="${item.id}" role="checkbox" aria-checked="${isSelected}">
                     <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                   </div>
                 </td>
-                <td data-label="#"><span class="num-field" style="font-size:0.75rem; color:var(--text-subtle);">${globalIndex}</span></td>
+                <td data-label="#" class="index-cell"><span class="num-field" style="font-size:0.75rem; color:var(--text-subtle);">${globalIndex}</span></td>
                 <td data-label="نام کی تفصیل (نام، کمپنی اور سائز)" class="col-name">
                   <div class="item-identity" dir="auto">
                     ${identityParts.map((part, index) => `${index ? '<span class="item-identity-separator" aria-hidden="true">–</span>' : ''}<span class="${index ? 'item-identity-detail' : 'item-identity-name'}">${escapeHTML(part)}</span>`).join('')}
@@ -3978,7 +4712,7 @@
                 </td>
                 <td data-label="مقدار" class="col-qty">
                   <div class="qty-cell-inner">
-                    <input type="number" class="table-input num-field in-qty" data-id="${item.id}" value="${item.qty || ''}" min="0.01" step="any" placeholder="0">
+                    <input type="number" inputmode="decimal" class="table-input num-field in-qty" data-id="${item.id}" value="${item.qty || ''}" min="0.01" step="any" placeholder="0">
                     <button type="button" class="qty-unit-trigger qty-unit-label" data-action="choose-qty-unit" data-id="${item.id}" title="اکائی بدلنے کے لیے کلک کریں">${escapeHTML(item.qtyUnit || 'کلوگرام')}</button>
                   </div>
                 </td>
@@ -4961,11 +5695,20 @@
               newlyFocusedInput = null;
             }
           });
+
+          document.addEventListener('touchend', e => {
+            if (isNumericInput(e.target)) {
+              setTimeout(() => {
+                trySelect(e.target);
+              }, 50);
+            }
+          }, { passive: true });
         };
 
         attachTableDelegations();
         setupNumericAutoSelect();
         initTheme();
+        initViewMode();
         renderTable();
       };
 
